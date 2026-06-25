@@ -96,5 +96,7 @@ I look forward to strengthening my Python skills and gaining hands-on experience
 ---
 
 **Status:** Completed ✅
+
 **Training Day:** 1/Total Days
+
 **Maintained By:** Saksham Kumar
