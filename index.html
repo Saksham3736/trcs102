@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRCS102 – Agentic AI Training II Diary</title>
+
+    <!-- Meta tags for SEO -->
+    <meta name="description"
+        content="TRCS102 Agentic AI Training Diary. Daily notes, concurrency topics, multi-agent frameworks, and learning milestones of Saksham Kumar at Auribises Technologies.">
+    <meta name="author" content="Saksham Kumar">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide/dist/umd/lucide.min.js"></script>
+
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Highlight.js for Code Highlighting -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Top Scrolling Progress Bar (Reader View) -->
+    <div id="scroll-progress-container">
+        <div id="scroll-progress-bar"></div>
+    </div>
+
+    <!-- App Container -->
+    <div class="app-layout">
+
+        <!-- Top Navbar -->
+        <header class="navbar">
+            <div class="nav-left">
+                <button id="mobile-menu-toggle" aria-label="Toggle Menu">
+                    <i data-lucide="menu"></i>
+                </button>
+                <a href="#home" class="brand">
+                    <img src="assets/logo.png" alt="TRCS102 Logo" class="brand-logo"
+                        onerror="this.style.display='none'">
+                    <span class="brand-text">Saksham <span class="brand-sub">Kumar</span></span>
+                </a>
+            </div>
+
+            <div class="nav-center">
+                <div class="search-container">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="global-search-input"
+                        placeholder="Search learning notes (e.g. threads, agents)..." autocomplete="off">
+                    <button id="clear-search-btn" class="hidden"><i data-lucide="x"></i></button>
+                </div>
+            </div>
+
+            <div class="nav-right">
+                <button id="theme-toggle" class="nav-action-btn" title="Toggle Theme">
+                    <i data-lucide="sun" class="sun-icon"></i>
+                    <i data-lucide="moon" class="moon-icon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Wrapper -->
+        <div class="main-wrapper">
+
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar" id="app-sidebar">
+                <div class="sidebar-header-nav">
+                    <a href="#home" class="sidebar-nav-item" id="nav-item-home">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#timeline" class="sidebar-nav-item" id="nav-item-timeline">
+                        <i data-lucide="milestone"></i>
+                        <span>Timeline</span>
+                    </a>
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <div class="sidebar-section-title">
+                    <span>Diary Entries</span>
+                    <span class="entries-count" id="total-entries-badge">0</span>
+                </div>
+
+                <!-- Dynamic Day List -->
+                <nav class="sidebar-menu" id="sidebar-day-list">
+                    <!-- Dynamic Items injected here -->
+                    <div class="skeleton-loader-sidebar">
+                        <div class="skeleton-item-sidebar"></div>
+                        <div class="skeleton-item-sidebar"></div>
+                        <div class="skeleton-item-sidebar"></div>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Sidebar Overlay for Mobile -->
+            <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+            <!-- Main Content Area -->
+            <main class="main-content" id="main-content-scroll">
+
+                <!-- Dashboard / Home View -->
+                <section id="view-home" class="content-view active">
+                    <div class="hero-section">
+                        <div class="hero-overlay">
+                            <span class="hero-tag">TRCS102 – Training II</span>
+                            <h1 class="hero-title">Agentic AI Training</h1>
+                            <p class="hero-subtitle">Daily Learning Diary</p>
+
+                            <div class="hero-meta-grid">
+                                <div class="hero-meta-item">
+                                    <i data-lucide="building-2"></i>
+                                    <span>Auribises Technologies Pvt. Ltd.</span>
+                                </div>
+                                <div class="hero-meta-item">
+                                    <i data-lucide="calendar"></i>
+                                    <span>June – July 2026</span>
+                                </div>
+                                <div class="hero-meta-item">
+                                    <i data-lucide="user"></i>
+                                    <span>Saksham Kumar</span>
+                                </div>
+                            </div>
+
+                            <div class="hero-actions">
+                                <button class="btn btn-primary" onclick="window.location.hash = '#/day/1'">
+                                    <span>View Diary</span>
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                                <a href="#timeline" class="btn btn-secondary">
+                                    <span>View Timeline</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hero-scroll-indicator">
+                            <div class="scroll-dot"></div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Grid -->
+                    <div class="dashboard-grid">
+                        <!-- Progress Card -->
+                        <div class="card card-progress">
+                            <div class="card-header-icon progress-icon-bg">
+                                <i data-lucide="trending-up"></i>
+                            </div>
+                            <h3>Training Progress</h3>
+                            <div class="progress-stats">
+                                <span class="progress-pct" id="progress-percentage">0%</span>
+                                <span class="progress-ratio" id="progress-days-ratio">0/0 Days</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" id="dashboard-progress-fill" style="width: 0%"></div>
+                            </div>
+                            <p class="card-desc">Training completion based on 30 scheduled days of professional
+                                training.</p>
+                        </div>
+
+                        <!-- Statistics Card -->
+                        <div class="card card-stats">
+                            <h3>Training Statistics</h3>
+                            <div class="stats-row-grid">
+                                <div class="stat-box">
+                                    <span class="stat-num" id="stat-words">0</span>
+                                    <span class="stat-lbl">Words Written</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-num" id="stat-read-time">0m</span>
+                                    <span class="stat-lbl">Est. Reading Time</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-num" id="stat-longest-entry">Day 0</span>
+                                    <span class="stat-lbl">Longest Entry</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Overview Card -->
+                        <div class="card card-latest">
+                            <h3>Latest Learning Entry</h3>
+                            <div class="latest-entry-preview" id="latest-entry-container">
+                                <h4 id="latest-title">Loading...</h4>
+                                <span class="latest-date" id="latest-date">-</span>
+                                <p id="latest-summary">Fetching the latest diary updates...</p>
+                                <button class="btn-text" id="latest-link-btn">
+                                    <span>Read Entry</span>
+                                    <i data-lucide="chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Timeline View -->
+                <section id="view-timeline" class="content-view hidden">
+                    <div class="section-header">
+                        <span class="section-tag">Chronology</span>
+                        <h2 class="section-heading">Training Timeline</h2>
+                        <p class="section-desc">A day-by-day roadmap of the competencies, tools, and algorithms covered
+                            during the training.</p>
+                    </div>
+
+                    <div class="timeline-container" id="timeline-flow">
+                        <!-- Dynamic Timeline items injected here -->
+                    </div>
+                </section>
+
+                <!-- Reader View -->
+                <section id="view-reader" class="content-view hidden">
+                    <div class="reader-layout">
+                        <!-- Article Body -->
+                        <article class="reader-article">
+                            <!-- Article Header -->
+                            <header class="article-header">
+                                <div class="article-meta-top">
+                                    <span class="day-badge" id="reader-day-badge">Day 0</span>
+                                    <span class="article-date" id="reader-date">June 26, 2026</span>
+                                </div>
+                                <h1 class="article-title" id="reader-title">Loading Diary Entry...</h1>
+                                <div class="article-metrics">
+                                    <div class="metric-item">
+                                        <i data-lucide="book-open"></i>
+                                        <span id="reader-read-time">0 min read</span>
+                                    </div>
+                                    <div class="metric-item">
+                                        <i data-lucide="file-text"></i>
+                                        <span id="reader-word-count">0 words</span>
+                                    </div>
+                                </div>
+                                <div class="article-tags" id="reader-tags">
+                                    <!-- Dynamic tags -->
+                                </div>
+                            </header>
+
+                            <!-- Loading Skeleton -->
+                            <div class="reader-skeleton" id="reader-skeleton-loader">
+                                <div class="skeleton-line-title"></div>
+                                <div class="skeleton-line-paragraph"></div>
+                                <div class="skeleton-line-paragraph"></div>
+                                <div class="skeleton-line-paragraph"></div>
+                            </div>
+
+                            <!-- Markdown Render Target -->
+                            <div class="markdown-body hidden" id="markdown-container">
+                                <!-- HTML parsed markdown goes here -->
+                            </div>
+
+                            <!-- Prev/Next Navigation -->
+                            <nav class="reader-pagination">
+                                <button class="pagination-btn prev" id="btn-prev-day">
+                                    <i data-lucide="arrow-left"></i>
+                                    <div class="pagination-label">
+                                        <span class="pagination-sub">PREVIOUS</span>
+                                        <span class="pagination-title" id="prev-day-title">Day X</span>
+                                    </div>
+                                </button>
+                                <button class="pagination-btn next" id="btn-next-day">
+                                    <div class="pagination-label">
+                                        <span class="pagination-sub">NEXT</span>
+                                        <span class="pagination-title" id="next-day-title">Day Y</span>
+                                    </div>
+                                    <i data-lucide="arrow-right"></i>
+                                </button>
+                            </nav>
+                        </article>
+
+                        <!-- Table of Contents Sidebar -->
+                        <aside class="toc-sidebar">
+                            <div class="toc-sticky-box">
+                                <div class="toc-title">
+                                    <i data-lucide="list"></i>
+                                    <span>On This Page</span>
+                                </div>
+                                <nav class="toc-menu" id="toc-container">
+                                    <!-- Dynamic TOC items -->
+                                </nav>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+
+                <!-- Search Results View -->
+                <section id="view-search" class="content-view hidden">
+                    <div class="section-header">
+                        <span class="section-tag">Search Results</span>
+                        <h2 class="section-heading" id="search-query-heading">Results for ""</h2>
+                        <p class="section-desc" id="search-results-count">Found 0 matching entries</p>
+                    </div>
+                    <div class="search-results-list" id="search-results-container">
+                        <!-- Dynamic Search Results -->
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <footer class="footer">
+                    <div class="footer-content">
+                        <div class="footer-brand">
+                            <span class="footer-title">TRCS102 Agentic AI Diary</span>
+                            <span class="footer-desc">Professional documentation log for Agentic AI Training (Training
+                                II).</span>
+                        </div>
+                        <div class="footer-meta">
+                            <span>Auribises Technologies Pvt. Ltd.</span>
+                            <span>Maintained by <strong>Saksham Kumar</strong></span>
+                            <span>Hosted using <strong>GitHub Pages</strong></span>
+                        </div>
+                    </div>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <!-- Main Controller Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
