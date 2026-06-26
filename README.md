@@ -31,16 +31,16 @@ The website is engineered to be completely **automated**. You can add new days w
 ### Create the Markdown File
 Simply create a new Markdown file inside the `/diary` directory.
 - Filename pattern: `dayN.md` (e.g., `day4.md`, `day5.md`).
-- At the top of the file, include **YAML Front Matter** containing the entry's metadata:
+- At the top of the file, include the metadata block wrapped in HTML comments (`<!-- ... -->`). This is crucial because standard `---` front matter triggers GitHub Pages' internal Jekyll compiler, causing it to compile the markdown files into HTML and delete the original `.md` files. Wrapping the metadata in HTML comments bypasses Jekyll processing, allowing our client-side JavaScript to read the raw Markdown contents and parse the metadata successfully.
 
 Example content structure (`diary/day4.md`):
 ```markdown
----
+<!--
 title: Custom LLM Tools and APIs
 date: 2026-06-30
 tags: Tools, APIs, Python
 summary: Building custom functional tools for LLM agent selection and parsing external API responses.
----
+-->
 # Day 4: Custom LLM Tools and APIs
 
 Today we focused on integrating external APIs as executable tools for our agents...
