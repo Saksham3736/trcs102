@@ -1,9 +1,9 @@
----
+<!--
 title: Processes, Threads & Concurrency
 date: 2026-06-26
 tags: Concurrency, OS, Python, Multithreading
 summary: Deep dive into OS processes, kernel vs user threads, context switching, and executing multithreaded operations in Python.
----
+-->
 # Day 2: Processes, Threads & Concurrency
 
 On Day 2 of our **Agentic AI training** at **Auribises Technologies**, we focused on system-level concurrency. Since agents must query multiple APIs, search databases, and perform reasoning tasks concurrently, understanding the difference between **Processes** and **Threads** is critical.

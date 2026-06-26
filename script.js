@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return discovered;
     }
 
-    // Parse Jekyll/Obsidian-style YAML front matter from markdown files
+    // Parse Jekyll/Obsidian-style YAML front matter or HTML comment front matter from markdown files
     function parseFrontMatter(text) {
         const result = {
             title: '',
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!text) return result;
         
-        const fmRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n/;
+        const fmRegex = /^(?:---|<!--)\r?\n([\s\S]*?)\r?\n(?:---|-->)\r?\n/;
         const match = text.match(fmRegex);
         
         if (match) {

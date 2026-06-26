@@ -1,9 +1,9 @@
----
+<!--
 title: Building Autonomous Agents with CrewAI
 date: 2026-06-29
 tags: Agents, CrewAI, Frameworks, LLMs
 summary: Explored multi-agent orchestration. Set up tasks, agents, and custom tools using CrewAI and LiteLLM.
----
+-->
 # Day 3: Building Autonomous Agents with CrewAI
 
 On Day 3, we stepped up from basic LLM prompts to **Multi-Agent Systems**. We explored **CrewAI**, a framework designed to enable multiple AI agents to collaborate, share memory, assign tasks, and execute complex workflows.

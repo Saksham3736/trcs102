@@ -1,9 +1,9 @@
----
+<!--
 title: Introduction & Agentic AI Fundamentals
 date: 2026-06-25
 tags: Agentic AI, Setup, Python, Overview
 summary: Introduction to the TRCS102 training and foundational concepts of Agentic AI. Set up Python environment and packages.
----
+-->
 # Day 1: Introduction & Agentic AI Fundamentals
 
 Welcome to Day 1 of the **TRCS102 Agentic AI Training** at **Auribises Technologies Pvt. Ltd.** Today's focus is on setting up our development environment and understanding the core shift from standard chatbots to autonomous agents.
