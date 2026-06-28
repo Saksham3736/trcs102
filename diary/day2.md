@@ -7,11 +7,11 @@ summary: Learned Python setup, execution model, processes, threads, memory archi
 
 # 🚀 Day 2: Python Fundamentals, Memory Management & MVC Architecture
 
-**Name:** Saksham Kumar
-**Course:** B.Tech Computer Science & Engineering
-**Institute:** Guru Nanak Dev Engineering College (GNDEC), Ludhiana
-**Training Program:** TRCS102 – Agentic AI Training
-**Day:** 2
+**Name:** Saksham Kumar\
+**Course:** B.Tech Computer Science & Engineering\
+**Institute:** Guru Nanak Dev Engineering College (GNDEC), Ludhiana\
+**Training Program:** TRCS102 – Agentic AI Training\
+**Day:** 2\
 **Date:** 26 June 2026
 
 ---
