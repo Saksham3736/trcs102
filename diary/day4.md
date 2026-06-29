@@ -2013,7 +2013,6 @@ for outer in range(8):
 ♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙
 ♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖
 ```
-
 ---
 
 ## Explanation
@@ -2031,6 +2030,205 @@ If neither condition is true, it prints either a black square or a white square 
 ```
 
 This creates the alternating chessboard pattern.
+
+---
+
+---
+
+# Alternate Solution (Method 2) – Using Lists to Store Major Chess Pieces
+
+After completing the chessboard using multiple conditional statements, an alternate and more optimized solution was introduced.
+
+Instead of checking every major chess piece individually using several `if-elif` conditions, the major pieces were first arranged inside two lists:
+
+- `black_row`
+- `white_row`
+
+The program then used the column index (`inner`) to access the correct chess piece directly from the list.
+
+This approach makes the code **shorter**, **cleaner**, and **easier to maintain**.
+
+---
+
+## Why Use Lists Here?
+
+The arrangement of major chess pieces is fixed.
+
+```
+Rook → Knight → Bishop → Queen → King → Bishop → Knight → Rook
+```
+
+Since this order never changes, storing it inside a list allows us to retrieve the correct piece simply by using the column index.
+
+For example,
+
+```
+inner = 0  → Rook
+inner = 1  → Knight
+inner = 2  → Bishop
+...
+inner = 7  → Rook
+```
+
+This completely removes the need for multiple conditional statements.
+
+---
+
+## Code
+
+```python
+white={
+    'pawn':"\u2659",
+    'knight': "\u2658",
+    'bishop': "\u2657",
+    'rook': "\u2656",
+    'queen': "\u2655",
+    'king': "\u2654",
+}
+black={
+    'pawn':"\u265F",
+    'knight': "\u265E",
+    'bishop': "\u265D",
+    'rook': "\u265C",
+    'queen': "\u265B",
+    'king': "\u265A",
+}
+black_sq="\u25A0"
+white_sq="\u25A1"
+
+black_row=[
+    black["rook"],
+    black["knight"],
+    black["bishop"],
+    black["queen"],
+    black["king"],
+    black["bishop"],
+    black["knight"],
+    black["rook"]
+]
+
+white_row=[
+    white["rook"],
+    white["knight"],
+    white["bishop"],
+    white["queen"],
+    white["king"],
+    white["bishop"],
+    white["knight"],
+    white["rook"]
+]
+
+for outer in range(8):
+    for inner in range(8):
+
+        if outer==0:
+            print(black_row[inner], end=" ")
+
+        elif outer==1:
+            print(black["pawn"], end=" ")
+
+        elif outer==6:
+            print(white["pawn"], end=" ")
+
+        elif outer==7:
+            print(white_row[inner], end=' ')
+
+        # blank spaces
+        elif (outer+inner)%2==0:
+            print(black_sq, end=" ")
+
+        else:
+            print(white_sq, end=" ")
+
+    print()
+```
+
+---
+
+## Output
+
+```text
+♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜
+♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟
+■ □ ■ □ ■ □ ■ □
+□ ■ □ ■ □ ■ □ ■
+■ □ ■ □ ■ □ ■ □
+□ ■ □ ■ □ ■ □ ■
+♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙
+♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖
+```
+
+---
+
+## Explanation
+
+Two lists, `black_row` and `white_row`, were created to store the arrangement of the major chess pieces.
+
+When the program reaches the first or last row of the chessboard, it simply prints the element at the current column index.
+
+For example,
+
+```python
+black_row[0]
+```
+
+prints the black rook, while
+
+```python
+black_row[3]
+```
+
+prints the black queen.
+
+Similarly,
+
+```python
+white_row[4]
+```
+
+prints the white king.
+
+For the second and seventh rows, only pawns are printed, while the remaining rows display alternating black and white squares using the condition
+
+```python
+(outer + inner) % 2 == 0
+```
+
+---
+
+## Advantages of This Approach
+
+- Fewer `if-elif` conditions are required.
+- The code becomes shorter and easier to understand.
+- Major chess pieces are managed using lists, making the program more organized.
+- If the arrangement ever changes, only the list needs to be updated instead of modifying multiple conditions.
+- Demonstrates the effective use of both **lists** and **dictionaries** in a single program.
+
+---
+
+## Comparison with the Previous Method
+
+| Previous Method | Alternate Method |
+|-----------------|------------------|
+| Multiple `if-elif` statements for each major piece | Uses two lists to store the complete arrangement |
+| Longer code | More concise and readable |
+| Piece positions checked individually | Pieces accessed directly using list indexing |
+| Harder to maintain | Easier to modify and extend |
+
+---
+
+## Key Learnings
+
+- Lists can be used to represent fixed sequences of data.
+- List indexing can simplify complex conditional logic.
+- Combining dictionaries with lists produces cleaner and more maintainable code.
+- Choosing the right data structure can significantly improve code readability without changing the program's output.
+
+---
+
+### Observation
+
+Although both implementations generate the exact same chessboard, this version is more elegant because it leverages Python's data structures effectively instead of relying on numerous conditional statements.
 
 ---
 
