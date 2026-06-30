@@ -1,9 +1,30 @@
 
 <!--
-title: Python Operators, Bitwise Operations & Conditional Constructs
-date: 2026-06-30
-tags: Python, Operators, Bitwise Operators, Shift Operators, Conditional Statements, If-Else, Nested If, Authentication, Promo Code System, Logic Building, Assignments
-summary: Day 5 focused on Python operators, bitwise and shift operations, conditional constructs, login authentication, promo code validation, and controller-based problem solving through practical implementations. The session also emphasized logical thinking, binary operations, security applications such as AES and SHA-256, and strengthening programming skills through daily conditional problem practice.
+type: training-diary
+training: TRCS101 - Agentic AI Training II
+day: 5
+date: 30/06/2026
+title: Python Operators, Bitwise Operations and Conditional Constructs
+description: Learned Python operators, bitwise and shift operations, conditional constructs, authentication systems, promo code validation, and controller-based problem solving through practical implementations.
+tags:
+- python
+- operators
+- arithmetic-operators
+- assignment-operators
+- comparison-operators
+- logical-operators
+- membership-operators
+- bitwise-operators
+- shift-operators
+- conditional-statements
+- nested-if
+- authentication
+- promo-code-system
+- problem-solving
+- beginner
+reading-time: 15 min
+completed: true
+next: Day 6
 -->
 # Agentic AI Training – Daily Diary
 
