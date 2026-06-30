@@ -28,11 +28,11 @@ next: Day 6
 -->
 # Agentic AI Training – Daily Diary
 
-**Name:** Saksham Kumar
-**Course:** B.Tech Computer Science & Engineering
-**Institute:** Guru Nanak Dev Engineering College (GNDEC), Ludhiana
-**Training Program:** Agentic AI Training (TRCS101)
-**Day:** 5
+**Name:** Saksham Kumar\
+**Course:** B.Tech Computer Science & Engineering\
+**Institute:** Guru Nanak Dev Engineering College (GNDEC), Ludhiana\
+**Training Program:** Agentic AI Training (TRCS101)\
+**Day:** 5\
 **Date:** 30 June 2026
 
 ---
