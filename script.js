@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const fileName = `day${day}.md`;
             try {
                 // Use HEAD request to check if file exists quickly without downloading it
-                const res = await fetch(`diary/${fileName}`, { method: 'HEAD' });
+                const res = await fetch(`diary/${fileName}?t=${Date.now()}`, { method: 'HEAD' });
                 if (res.ok) {
                     consecutiveMisses = 0;
                     discovered.push({
@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function prefetchAndCalcStats() {
         const fetchPromises = window.diaryState.entries.map(async (entry) => {
             try {
-                const res = await fetch(`diary/${entry.file}`);
+                const res = await fetch(`diary/${entry.file}?t=${Date.now()}`);
                 if (res.ok) {
                     const text = await res.text();
                     
@@ -390,15 +390,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Custom human-readable date format (e.g. 2026-06-25 -> Jun 25, 2026)
+    // Custom human-readable date format (e.g. 2026-06-25 -> Jun 25, 2026 or 29/06/2026 -> Jun 29, 2026)
     function formatDate(dateString) {
         if (!dateString) return '-';
-        const parts = dateString.split('-');
+        let separator = '-';
+        if (dateString.includes('/')) {
+            separator = '/';
+        }
+        const parts = dateString.split(separator);
         if (parts.length !== 3) return dateString;
+        
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const year = parts[0];
-        const month = months[parseInt(parts[1], 10) - 1];
-        const day = parseInt(parts[2], 10);
+        let year, monthIdx, day;
+        
+        if (parts[0].length === 4) {
+            // YYYY-MM-DD
+            year = parts[0];
+            monthIdx = parseInt(parts[1], 10) - 1;
+            day = parseInt(parts[2], 10);
+        } else {
+            // DD-MM-YYYY or DD/MM/YYYY
+            day = parseInt(parts[0], 10);
+            monthIdx = parseInt(parts[1], 10) - 1;
+            year = parts[2];
+        }
+        
+        const month = months[monthIdx] || parts[1];
         return `${month} ${day}, ${year}`;
     }
 
@@ -607,7 +624,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.diaryState.contentCache[entry.file]) {
                 markdownText = window.diaryState.contentCache[entry.file];
             } else {
-                const res = await fetch(`diary/${entry.file}`);
+                const res = await fetch(`diary/${entry.file}?t=${Date.now()}`);
                 if (!res.ok) throw new Error(`HTTP Error fetching: ${entry.file}`);
                 const fullText = await res.text();
                 const parsed = parseFrontMatter(fullText);

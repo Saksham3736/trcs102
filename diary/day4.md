@@ -1,21 +1,8 @@
 <!--
-type: training-diary
-training: TRCS101 - Agentic AI Training II
-day: 4
-date: 29/06/2026
-title: Python Memory Management - Sets, Dictionaries and Hashing
-description: Understanding Python memory model, hashing, sets, dictionaries and object identity.
-tags:
-- python
-- sets
-- dictionary
-- hashing
-- memory-management
-- id-function
-- beginner
-reading-time: 10 min
-completed: true
-next: Day 5
+title: Python Memory Management, Sets, Dictionaries & Chessboard Implementation
+date: 2026-06-29
+tags: Python, Memory Management, Hashing, Sets, Dictionaries, id(), __name__, Modules, Iteration, Nested Loops, Unicode, Chessboard
+summary: Day 4 focused on Python memory management, object identity using id(), Sets and Dictionaries, the __name__ variable, module imports, iterations, nested loops, Unicode, and implementing a complete chessboard using optimized Python techniques.
 -->
 
 # Agentic AI Training – Daily Diary
@@ -31,7 +18,7 @@ next: Day 5
 
 # Daily Training Record – Day 4
 
-## Overview
+## Overview - Python Memory Management & Chessboard Implementation
 
 The fourth day of training focused on understanding Python's internal memory management and how different data structures are stored in memory. The session began with the internal working of **Sets** and **Dictionaries**, explaining how hashing is used for efficient storage and retrieval of data.
 
