@@ -166,30 +166,50 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!text) return result;
         
-        const fmRegex = /^(?:---|<!--)\r?\n([\s\S]*?)\r?\n(?:---|-->)\r?\n/;
+        // Match front matter block (either --- or <!--) with optional leading whitespace/newlines
+        const fmRegex = /^\s*(?:---|<!--)\r?\n([\s\S]*?)\r?\n(?:---|-->)\r?\n/;
         const match = text.match(fmRegex);
         
         if (match) {
             const fmText = match[1];
-            result.content = text.substring(match[0].length);
+            result.content = text.substring(match.index + match[0].length);
             
             const lines = fmText.split('\n');
+            let currentKey = null;
+            
             lines.forEach(line => {
+                const trimmed = line.trim();
+                if (!trimmed) return;
+                
+                // Support YAML list style for tags (e.g., "- python")
+                if (trimmed.startsWith('-') && currentKey === 'tags') {
+                    const val = trimmed.substring(1).trim().replace(/^["']|["']$/g, '');
+                    if (val) result.tags.push(val);
+                    return;
+                }
+                
                 const colonIdx = line.indexOf(':');
                 if (colonIdx !== -1) {
                     const key = line.substring(0, colonIdx).trim().toLowerCase();
                     const val = line.substring(colonIdx + 1).trim().replace(/^["']|["']$/g, '');
+                    currentKey = key;
                     
                     if (key === 'title') {
                         result.title = val;
                     } else if (key === 'date') {
                         result.date = val;
                     } else if (key === 'tags') {
-                        const cleanVal = val.replace(/[\[\]]/g, '');
-                        result.tags = cleanVal.split(',').map(t => t.trim().replace(/^["']|["']$/g, '')).filter(t => t.length > 0);
+                        if (val) {
+                            const cleanVal = val.replace(/[\[\]]/g, '');
+                            result.tags = cleanVal.split(',').map(t => t.trim().replace(/^["']|["']$/g, '')).filter(t => t.length > 0);
+                        } else {
+                            result.tags = [];
+                        }
                     } else if (key === 'summary') {
                         result.summary = val;
                     }
+                } else {
+                    currentKey = null;
                 }
             });
         }
@@ -202,11 +222,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // Fallback for missing summary: look for first paragraph
+        // Fallback for missing summary: look for first paragraph, ignoring comments/lists/headings/quotes
         if (!result.summary) {
             const paragraphs = result.content.split('\n')
                 .map(line => line.trim())
-                .filter(line => line.length > 0 && !line.startsWith('#') && !line.startsWith('>') && !line.startsWith('-'));
+                .filter(line => line.length > 0 && !line.startsWith('#') && !line.startsWith('>') && !line.startsWith('-') && !line.startsWith('<') && !line.startsWith('-->'));
             if (paragraphs.length > 0) {
                 result.summary = paragraphs[0].substring(0, 150) + (paragraphs[0].length > 150 ? '...' : '');
             }
@@ -301,6 +321,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         await Promise.all(fetchPromises);
+        
+        // Filter out entries that are empty (e.g. 0-byte placeholder files)
+        window.diaryState.entries = window.diaryState.entries.filter(entry => {
+            const wc = window.diaryState.wordsCache[entry.file] || 0;
+            return wc > 0;
+        });
+
+        // Update total entry badge count dynamically
+        els.totalEntriesBadge.textContent = window.diaryState.entries.length;
         
         // Re-render list & timeline with full metadata from files
         renderSidebarList();
