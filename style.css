@@ -1505,6 +1505,9 @@ body::after {
     gap: 8px;
     border-left: 1px solid var(--border-color);
     padding-left: 8px;
+    padding-right: 8px;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
 }
 
 .toc-link {
