@@ -132,3 +132,4 @@ Then open: `http://localhost:3000`
 4. Under **Build and deployment**, select **Deploy from a branch**.
 5. Set branch to `main` (or `/root`) and click **Save**.
 6. Your diary will be live at `https://your-username.github.io/TRCS102-Diary/` in a few minutes!
+
