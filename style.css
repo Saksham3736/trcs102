@@ -1034,7 +1034,7 @@ body::after {
     display: grid;
     grid-template-columns: 1fr var(--toc-width);
     gap: 40px;
-    align-items: start;
+    align-items: stretch;
     width: 100%;
 }
 
