@@ -118,6 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
         els.sidebarOverlay.classList.remove('active');
     }
 
+    // --- 2b. Desktop Sidebar Toggle ---
+    function initDesktopSidebarToggle() {
+        const toggleHandle = document.getElementById('sidebar-toggle-handle');
+        const appLayout = document.querySelector('.app-layout');
+        
+        if (toggleHandle && appLayout) {
+            toggleHandle.addEventListener('click', () => {
+                const isCollapsed = appLayout.classList.toggle('sidebar-collapsed');
+                toggleHandle.title = isCollapsed ? "Expand Sidebar" : "Collapse Sidebar";
+            });
+        }
+    }
+
     // --- 3. Core Auto-Discovery & Front Matter Parser ---
     
     // Probe the /diary folder sequentially for dayN.md files
@@ -239,6 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             initTheme();
             initMobileMenu();
+            initDesktopSidebarToggle();
             initScrollIndicator();
             initSearchEvents();
             
