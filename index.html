@@ -154,10 +154,19 @@
                                 </div>
                             </div>
 
-                            <!-- Hero Visual Image -->
+                            <!-- Hero Visual Image (theme-aware) -->
                             <div class="hero-visual">
                                 <div class="hero-visual-glow"></div>
-                                <img src="assets/hero-image.png" alt="AI Neural Network Visualization" class="hero-image" />
+                                <div class="hero-image-wrap">
+                                    <!-- Dark theme image (default) -->
+                                    <img src="assets/hero-image.png"
+                                         alt="AI Neural Network Visualization"
+                                         class="hero-image hero-image-dark" />
+                                    <!-- Light theme image -->
+                                    <img src="assets/hero-image-light.png"
+                                         alt="AI Neural Network Visualization"
+                                         class="hero-image hero-image-light" />
+                                </div>
                             </div>
                         </div>
                         <div class="hero-scroll-indicator">
