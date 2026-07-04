@@ -841,10 +841,26 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Query headers from container
         const headings = els.markdownContainer.querySelectorAll('h2, h3');
+        const readerLayout = els.viewReader ? els.viewReader.querySelector('.reader-layout') : null;
         
-        if (headings.length === 0) {
-            els.tocContainer.innerHTML = '<span class="toc-link" style="font-style:italic; color:var(--text-muted);">No sections found.</span>';
+        // Limit: Require at least 3 headings to render the Table of Contents sidebar
+        const TOC_LIMIT = 3;
+        
+        if (headings.length < TOC_LIMIT) {
+            if (readerLayout) {
+                readerLayout.classList.add('hide-toc');
+            }
+            // Clean up any active ScrollSpy handler since TOC sidebar is hidden
+            if (activeScrollSpyHandler) {
+                els.mainContentScroll.removeEventListener('scroll', activeScrollSpyHandler);
+                activeScrollSpyHandler = null;
+            }
             return;
+        }
+        
+        // Restore layout state if threshold is reached
+        if (readerLayout) {
+            readerLayout.classList.remove('hide-toc');
         }
         
         headings.forEach((heading, index) => {

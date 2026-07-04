@@ -1124,6 +1124,14 @@ body::after {
     width: 100%;
 }
 
+.reader-layout.hide-toc {
+    grid-template-columns: 1fr;
+}
+
+.reader-layout.hide-toc .toc-sidebar {
+    display: none;
+}
+
 .reader-article {
     min-width: 0;
     /* Prevents flex items from overflowing */
