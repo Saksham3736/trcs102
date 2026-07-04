@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
         previousHash: ''      // Track hash navigation histories
     };
 
+    let activeScrollSpyHandler = null;
+
     // --- DOM Elements Cache ---
     const els = {
         themeToggle: document.getElementById('theme-toggle'),
@@ -878,13 +880,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ScrollSpy highlighter logic
     function initScrollSpy(headings) {
-        const spyScrollHandler = () => {
-            const scrollPos = els.mainContentScroll.scrollTop + 80;
+        if (activeScrollSpyHandler) {
+            els.mainContentScroll.removeEventListener('scroll', activeScrollSpyHandler);
+        }
+        
+        activeScrollSpyHandler = () => {
+            const containerRect = els.mainContentScroll.getBoundingClientRect();
             let activeHeadingId = null;
             
+            // Find the last heading that is above the threshold (e.g. 100px from the top of the container's visible area)
             headings.forEach(heading => {
-                const top = heading.offsetTop;
-                if (scrollPos >= top) {
+                const rect = heading.getBoundingClientRect();
+                const relativeTop = rect.top - containerRect.top;
+                if (relativeTop <= 100) {
                     activeHeadingId = heading.id;
                 }
             });
@@ -900,8 +908,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         
-        els.mainContentScroll.removeEventListener('scroll', spyScrollHandler);
-        els.mainContentScroll.addEventListener('scroll', spyScrollHandler);
+        els.mainContentScroll.addEventListener('scroll', activeScrollSpyHandler);
+        
+        // Trigger once to highlight the initial active section on page load
+        activeScrollSpyHandler();
     }
 
     // Reader Pagination Toggles
