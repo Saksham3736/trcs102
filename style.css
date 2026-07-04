@@ -1569,7 +1569,7 @@ body::after {
     transform: translateX(4px);
 }
 
-/* Sticky TOC Sidebar */
+/* Premium Sticky TOC Sidebar */
 .toc-sidebar {
     width: var(--toc-width);
     flex-shrink: 0;
@@ -1580,7 +1580,14 @@ body::after {
     top: 40px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 16px;
+    padding: 20px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--shadow-sm);
 }
 
 .toc-title {
@@ -1591,23 +1598,42 @@ body::after {
     font-weight: 700;
     text-transform: uppercase;
     color: var(--text-muted);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.75px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .toc-title i {
     width: 14px;
     height: 14px;
+    color: var(--color-primary);
 }
 
 .toc-menu {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    border-left: 1px solid var(--border-color);
-    padding-left: 8px;
-    padding-right: 8px;
-    max-height: calc(100vh - 160px);
+    gap: 4px;
+    max-height: calc(100vh - 240px);
     overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* Beautiful custom scrollbar for TOC menu */
+.toc-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.toc-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.toc-menu::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 2px;
+}
+
+.toc-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
 }
 
 .toc-link {
@@ -1618,19 +1644,24 @@ body::after {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: var(--transition-fast);
-    padding: 4px 8px;
-    border-radius: 4px;
+    transition: all var(--transition-fast);
+    padding: 6px 12px;
+    border-radius: 8px;
     border-left: 2px solid transparent;
+    line-height: 1.4;
 }
 
 .toc-link.indent-2 {
-    padding-left: 18px;
+    margin-left: 12px;
+    font-size: 0.8rem;
+    padding-left: 8px;
+    color: var(--text-muted);
 }
 
 .toc-link:hover {
-    color: var(--color-primary);
-    background-color: rgba(var(--color-primary-rgb), 0.04);
+    color: var(--text-primary);
+    background-color: var(--bg-surface-hover);
+    transform: translateX(2px);
 }
 
 .toc-link.active {

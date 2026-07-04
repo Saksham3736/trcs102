@@ -497,7 +497,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 4. Reader/Day Route
         else if (hash.startsWith('#/day/') || hash.startsWith('#day/')) {
-            const dayNum = parseInt(hash.split('/').pop(), 10);
+            const routePath = hash.substring(1); // e.g. "/day/1#overview-0" or "/day/1"
+            const hashIndex = routePath.indexOf('#');
+            
+            const path = hashIndex !== -1 ? routePath.substring(0, hashIndex) : routePath;
+            const anchor = hashIndex !== -1 ? routePath.substring(hashIndex + 1) : '';
+            
+            const dayNum = parseInt(path.split('/').pop(), 10);
             if (isNaN(dayNum)) {
                 window.location.hash = '#home';
                 return;
@@ -510,11 +516,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const sidebarItem = document.getElementById(`sidebar-day-${dayNum}`);
             if (sidebarItem) {
                 sidebarItem.classList.add('active');
-                // Scroll sidebar to active element smoothly
-                sidebarItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                // Scroll sidebar to active element smoothly if switching days
+                if (window.diaryState.currentDay !== dayNum) {
+                    sidebarItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
             }
             
-            loadAndRenderDay(dayNum);
+            if (window.diaryState.currentDay === dayNum) {
+                // Already on the active day, scroll directly to target section
+                if (anchor) {
+                    scrollToAnchor(anchor);
+                }
+            } else {
+                loadAndRenderDay(dayNum, anchor);
+            }
         } 
         
         // Fallback
@@ -599,7 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 6. Markdown Fetching & Rendering Engine ---
-    async function loadAndRenderDay(dayNum) {
+    async function loadAndRenderDay(dayNum, anchor = '') {
         window.diaryState.currentDay = dayNum;
         
         const entry = window.diaryState.entries.find(e => e.day === dayNum);
@@ -684,6 +699,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 els.readerSkeletonLoader.style.display = 'none';
                 els.markdownContainer.classList.remove('hidden');
                 if (window.lucide) window.lucide.createIcons();
+                
+                // Scroll to anchor section if present on initial load
+                if (anchor) {
+                    scrollToAnchor(anchor);
+                }
             }, 150);
             
         } catch (error) {
@@ -880,11 +900,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add soft scroll click handler
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                
-                // Highlight clicked active state manually
-                els.tocContainer.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
+                // Route navigation without page reload via routing path + anchor
+                window.location.hash = `#/day/${window.diaryState.currentDay}#${headingId}`;
             });
             
             els.tocContainer.appendChild(link);
@@ -904,18 +921,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const containerRect = els.mainContentScroll.getBoundingClientRect();
             let activeHeadingId = null;
             
-            // Find the last heading that is above the threshold (e.g. 100px from the top of the container's visible area)
+            // Find the last heading that is above the threshold (80px from top of container viewport)
             headings.forEach(heading => {
                 const rect = heading.getBoundingClientRect();
                 const relativeTop = rect.top - containerRect.top;
-                if (relativeTop <= 100) {
+                if (relativeTop <= 80) {
                     activeHeadingId = heading.id;
                 }
             });
             
             if (activeHeadingId) {
                 els.tocContainer.querySelectorAll('.toc-link').forEach(link => {
-                    if (link.getAttribute('href') === `#${activeHeadingId}`) {
+                    // Extract anchor part from link href
+                    const href = link.getAttribute('href');
+                    if (href === `#${activeHeadingId}`) {
                         link.classList.add('active');
                     } else {
                         link.classList.remove('active');
@@ -928,6 +947,31 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Trigger once to highlight the initial active section on page load
         activeScrollSpyHandler();
+    }
+
+    // Dynamic offset scroll to active anchor helper
+    function scrollToAnchor(anchorId) {
+        const heading = document.getElementById(anchorId);
+        if (heading) {
+            const containerRect = els.mainContentScroll.getBoundingClientRect();
+            const rect = heading.getBoundingClientRect();
+            // Scroll offset leaves a 24px padding margin below any headers
+            const targetScrollTop = els.mainContentScroll.scrollTop + (rect.top - containerRect.top) - 24;
+            
+            els.mainContentScroll.scrollTo({
+                top: targetScrollTop,
+                behavior: 'smooth'
+            });
+            
+            // Explicitly force highlight update on active TOC link
+            els.tocContainer.querySelectorAll('.toc-link').forEach(link => {
+                if (link.getAttribute('href') === `#${anchorId}`) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
     }
 
     // Reader Pagination Toggles
