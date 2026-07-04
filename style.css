@@ -1638,6 +1638,7 @@ body::after {
 
 .toc-link {
     display: block;
+    flex-shrink: 0;
     font-size: 0.85rem;
     color: var(--text-secondary);
     text-decoration: none;
