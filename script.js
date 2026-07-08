@@ -4,6 +4,8 @@
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+    const pageStartTime = Date.now();
+
     // --- Global Application State ---
     window.diaryState = {
         entries: [],          // Parsed from diary.json
@@ -11,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
         wordsCache: {},       // Cache word counts: { 'day1.md': 450 }
         currentDay: null,     // Active day number when in reader view
         activeTheme: 'dark',  // Theme state: dark / light
-        previousHash: ''      // Track hash navigation histories
+        previousHash: '',     // Track hash navigation histories
+        isInitialLoad: true   // Flag to handle initial loading screen
     };
 
     let activeScrollSpyHandler = null;
@@ -73,7 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btnNextDay: document.getElementById('btn-next-day'),
         prevDayTitle: document.getElementById('prev-day-title'),
         nextDayTitle: document.getElementById('next-day-title'),
-        tocContainer: document.getElementById('toc-container')
+        tocContainer: document.getElementById('toc-container'),
+        globalPageLoader: document.getElementById('global-page-loader')
     };
 
     // Initialize Lucide Icons
@@ -276,6 +280,16 @@ document.addEventListener('DOMContentLoaded', () => {
             handleRouting();
             window.addEventListener('hashchange', handleRouting);
             
+            // Hide the global page loader after ensuring at least 1.25 seconds of loading time
+            const elapsed = Date.now() - pageStartTime;
+            const remaining = Math.max(0, 1250 - elapsed);
+            setTimeout(() => {
+                if (els.globalPageLoader) {
+                    els.globalPageLoader.classList.add('hidden');
+                }
+                window.diaryState.isInitialLoad = false;
+            }, remaining);
+            
         } catch (error) {
             console.error('App initialization error:', error);
             showGlobalError(error.message);
@@ -449,6 +463,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (window.lucide) window.lucide.createIcons();
     }
 
+    // Helper to show full-screen global loader during view transitions
+    function triggerTransitionLoader(callback) {
+        if (els.globalPageLoader) {
+            els.globalPageLoader.classList.remove('hidden');
+            setTimeout(() => {
+                if (callback) callback();
+                els.globalPageLoader.classList.add('hidden');
+            }, 1250);
+        } else {
+            if (callback) callback();
+        }
+    }
+
     // --- 4. Custom Client-side Router ---
     function handleRouting() {
         const hash = window.location.hash || '#home';
@@ -464,7 +491,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 1. Dashboard / Home Route
         if (hash === '#home' || hash === '#/home' || hash === '') {
-            showView(els.viewHome);
+            if (window.diaryState.isInitialLoad) {
+                showView(els.viewHome);
+            } else {
+                triggerTransitionLoader(() => {
+                    showView(els.viewHome);
+                });
+            }
             els.navHome.classList.add('active');
             document.title = "TRCS102 – Agentic AI Training Dashboard";
             els.mainContentScroll.scrollTop = 0;
@@ -472,26 +505,41 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 2. Timeline Route
         else if (hash === '#timeline' || hash === '#/timeline') {
-            showView(els.viewTimeline);
+            if (window.diaryState.isInitialLoad) {
+                showView(els.viewTimeline);
+                triggerTimelineAnimations();
+            } else {
+                triggerTransitionLoader(() => {
+                    showView(els.viewTimeline);
+                    triggerTimelineAnimations();
+                });
+            }
             els.navTimeline.classList.add('active');
             document.title = "TRCS102 – Training Timeline";
             els.mainContentScroll.scrollTop = 0;
-            triggerTimelineAnimations();
         } 
         
         // 3. Search Route
         else if (hash.startsWith('#/search') || hash.startsWith('#search')) {
-            showView(els.viewSearch);
-            // Parse search query
             const urlParams = new URLSearchParams(hash.includes('?') ? hash.split('?')[1] : '');
             const query = urlParams.get('q') || '';
-            els.globalSearchInput.value = query;
-            if (query) {
-                els.clearSearchBtn.classList.remove('hidden');
-                executeSearch(query);
+            
+            const handleSearchAction = () => {
+                showView(els.viewSearch);
+                els.globalSearchInput.value = query;
+                if (query) {
+                    els.clearSearchBtn.classList.remove('hidden');
+                    executeSearch(query);
+                } else {
+                    els.clearSearchBtn.classList.add('hidden');
+                    els.searchResultsContainer.innerHTML = '<p class="section-desc">Type query in search bar above to look up technical concepts...</p>';
+                }
+            };
+
+            if (window.diaryState.isInitialLoad) {
+                handleSearchAction();
             } else {
-                els.clearSearchBtn.classList.add('hidden');
-                els.searchResultsContainer.innerHTML = '<p class="section-desc">Type query in search bar above to look up technical concepts...</p>';
+                triggerTransitionLoader(handleSearchAction);
             }
         } 
         
@@ -509,26 +557,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            showView(els.viewReader);
-            els.scrollProgressContainer.style.display = 'block';
-            
-            // Highlight current day in sidebar
-            const sidebarItem = document.getElementById(`sidebar-day-${dayNum}`);
-            if (sidebarItem) {
-                sidebarItem.classList.add('active');
-                // Scroll sidebar to active element smoothly if switching days
-                if (window.diaryState.currentDay !== dayNum) {
-                    sidebarItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            const handleReaderAction = () => {
+                showView(els.viewReader);
+                els.scrollProgressContainer.style.display = 'block';
+                
+                // Highlight current day in sidebar
+                const sidebarItem = document.getElementById(`sidebar-day-${dayNum}`);
+                if (sidebarItem) {
+                    sidebarItem.classList.add('active');
+                    // Scroll sidebar to active element smoothly if switching days
+                    if (window.diaryState.currentDay !== dayNum) {
+                        sidebarItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
                 }
-            }
-            
-            if (window.diaryState.currentDay === dayNum) {
-                // Already on the active day, scroll directly to target section
-                if (anchor) {
-                    scrollToAnchor(anchor);
+                
+                if (window.diaryState.currentDay === dayNum) {
+                    // Already on the active day, scroll directly to target section
+                    if (anchor) {
+                        scrollToAnchor(anchor);
+                    }
+                } else {
+                    loadAndRenderDay(dayNum, anchor);
                 }
+            };
+
+            if (window.diaryState.isInitialLoad) {
+                handleReaderAction();
             } else {
-                loadAndRenderDay(dayNum, anchor);
+                triggerTransitionLoader(handleReaderAction);
             }
         } 
         
@@ -704,7 +760,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (anchor) {
                     scrollToAnchor(anchor);
                 }
-            }, 150);
+            }, 50);
             
         } catch (error) {
             console.error('Reader rendering error:', error);
