@@ -77,7 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
         prevDayTitle: document.getElementById('prev-day-title'),
         nextDayTitle: document.getElementById('next-day-title'),
         tocContainer: document.getElementById('toc-container'),
-        globalPageLoader: document.getElementById('global-page-loader')
+        globalPageLoader: document.getElementById('global-page-loader'),
+        searchSuggestionsDropdown: document.getElementById('search-suggestions-dropdown')
     };
 
     // Initialize Lucide Icons
@@ -581,7 +582,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            if (window.diaryState.isInitialLoad) {
+            if (window.diaryState.isInitialLoad || window.diaryState.currentDay === dayNum) {
                 handleReaderAction();
             } else {
                 triggerTransitionLoader(handleReaderAction);
@@ -1081,17 +1082,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 9. Real-time Live Search Engine ---
     function initSearchEvents() {
-        // Trigger search on input typing
+        // Trigger suggestions dropdown on input typing
         els.globalSearchInput.addEventListener('input', (e) => {
             const query = e.target.value.trim();
             if (query) {
                 els.clearSearchBtn.classList.remove('hidden');
-                // Debounce search update to avoid constant hash updates
-                updateSearchHash(query);
+                showSearchSuggestions(query);
             } else {
                 els.clearSearchBtn.classList.add('hidden');
-                // Return to dashboard when search cleared
-                window.location.hash = '#home';
+                hideSearchSuggestions();
+            }
+        });
+        
+        // Handle keypress events for Enter (trigger search page) and Escape (close suggestions)
+        els.globalSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const query = els.globalSearchInput.value.trim();
+                hideSearchSuggestions();
+                if (query) {
+                    window.location.hash = `#/search?q=${encodeURIComponent(query)}`;
+                } else {
+                    window.location.hash = '#home';
+                }
+            } else if (e.key === 'Escape') {
+                hideSearchSuggestions();
+                els.globalSearchInput.blur();
+            }
+        });
+        
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-container')) {
+                hideSearchSuggestions();
             }
         });
         
@@ -1099,17 +1121,72 @@ document.addEventListener('DOMContentLoaded', () => {
         els.clearSearchBtn.addEventListener('click', () => {
             els.globalSearchInput.value = '';
             els.clearSearchBtn.classList.add('hidden');
+            hideSearchSuggestions();
             window.location.hash = '#home';
         });
     }
 
-    // Debouncer helper
-    let searchDebounceTimeout;
-    function updateSearchHash(query) {
-        clearTimeout(searchDebounceTimeout);
-        searchDebounceTimeout = setTimeout(() => {
-            window.location.hash = `#/search?q=${encodeURIComponent(query)}`;
-        }, 300);
+    function showSearchSuggestions(query) {
+        if (!els.searchSuggestionsDropdown) return;
+        const lowerQuery = query.toLowerCase();
+        
+        // Find matching entries (title, tags, or content)
+        const matches = [];
+        window.diaryState.entries.forEach(entry => {
+            const content = window.diaryState.contentCache[entry.file] || '';
+            const matchesTitle = entry.title.toLowerCase().includes(lowerQuery);
+            const matchesTags = entry.tags && entry.tags.some(t => t.toLowerCase().includes(lowerQuery));
+            const matchesContent = content.toLowerCase().includes(lowerQuery);
+            
+            if (matchesTitle || matchesTags || matchesContent) {
+                let score = 0;
+                if (matchesTitle) score += 50;
+                if (matchesTags) score += 30;
+                if (matchesContent) score += 10;
+                matches.push({ entry, score });
+            }
+        });
+        
+        // Sort matches by relevance score
+        matches.sort((a, b) => b.score - a.score);
+        
+        // Render all matching items as suggestions
+        if (matches.length === 0) {
+            els.searchSuggestionsDropdown.innerHTML = `
+                <div style="padding: 12px 16px; font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+                    No recommendations found
+                </div>
+            `;
+        } else {
+            els.searchSuggestionsDropdown.innerHTML = '';
+            matches.forEach(match => {
+                const suggestionItem = document.createElement('div');
+                suggestionItem.className = 'search-suggestion-item';
+                suggestionItem.innerHTML = `
+                    <span class="suggestion-day">Day ${match.entry.day}</span>
+                    <span class="suggestion-title">${match.entry.title}</span>
+                    <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: var(--text-muted);"></i>
+                `;
+                
+                suggestionItem.addEventListener('click', () => {
+                    els.globalSearchInput.value = match.entry.title;
+                    hideSearchSuggestions();
+                    window.location.hash = `#/day/${match.entry.day}`;
+                });
+                
+                els.searchSuggestionsDropdown.appendChild(suggestionItem);
+            });
+            
+            if (window.lucide) window.lucide.createIcons();
+        }
+        
+        els.searchSuggestionsDropdown.classList.remove('hidden');
+    }
+
+    function hideSearchSuggestions() {
+        if (els.searchSuggestionsDropdown) {
+            els.searchSuggestionsDropdown.classList.add('hidden');
+        }
     }
 
     function executeSearch(query) {
