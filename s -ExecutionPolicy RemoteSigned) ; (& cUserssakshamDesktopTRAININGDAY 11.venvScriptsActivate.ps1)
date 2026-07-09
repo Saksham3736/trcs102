@@ -1,0 +1,90 @@
+[1mdiff --git a/diary/day12.md b/diary/day12.md[m
+[1mindex 6b099e4..41b57dd 100644[m
+[1m--- a/diary/day12.md[m
+[1m+++ b/diary/day12.md[m
+[36m@@ -139,29 +139,17 @@[m [mDuring the session, the senior explained the complete processing pipeline follow[m
+ [m
+ ```[m
+ User[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Types a Message[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Chatbot Receives Request[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Message Processing[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Business Logic[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Parking Ticket Allocation[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Response Sent to User[m
+ ```[m
+ [m
+[36m@@ -191,13 +179,9 @@[m [mThe next stage involves processing the received message.[m
+ [m
+ ```[m
+ Raw Message[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Processing[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Useful Information[m
+ ```[m
+ [m
+[36m@@ -222,13 +206,9 @@[m [mConceptually,[m
+ [m
+ ```[m
+ Processed Request[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Business Rules[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Decision[m
+ ```[m
+ [m
+[36m@@ -250,13 +230,9 @@[m [mthe chatbot automatically allocates a parking ticket.[m
+ [m
+ ```[m
+ Business Logic[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Parking Allocation[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Ticket Generated[m
+ ```[m
+ [m
+[36m@@ -276,13 +252,9 @@[m [mthe generated result is sent back to the user.[m
+ [m
+ ```[m
+ Parking Ticket[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Response Generated[m
+[31m-[m
+     ↓[m
+[31m-[m
+ Displayed to User[m
+ ```[m
+ [m

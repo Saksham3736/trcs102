@@ -139,29 +139,17 @@ During the session, the senior explained the complete processing pipeline follow
 
 ```
 User
-
     ↓
-
 Types a Message
-
     ↓
-
 Chatbot Receives Request
-
     ↓
-
 Message Processing
-
     ↓
-
 Business Logic
-
     ↓
-
 Parking Ticket Allocation
-
     ↓
-
 Response Sent to User
 ```
 
@@ -191,13 +179,9 @@ The next stage involves processing the received message.
 
 ```
 Raw Message
-
     ↓
-
 Processing
-
     ↓
-
 Useful Information
 ```
 
@@ -222,13 +206,9 @@ Conceptually,
 
 ```
 Processed Request
-
     ↓
-
 Business Rules
-
     ↓
-
 Decision
 ```
 
@@ -250,13 +230,9 @@ the chatbot automatically allocates a parking ticket.
 
 ```
 Business Logic
-
     ↓
-
 Parking Allocation
-
     ↓
-
 Ticket Generated
 ```
 
@@ -276,13 +252,9 @@ the generated result is sent back to the user.
 
 ```
 Parking Ticket
-
     ↓
-
 Response Generated
-
     ↓
-
 Displayed to User
 ```
 
