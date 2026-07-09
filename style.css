@@ -12,8 +12,8 @@
     --nav-height: 70px;
     --sidebar-width: 280px;
     --toc-width: 240px;
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-fast: all 0.15s ease;
+    --transition-smooth: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
 
     /* Dark Theme Variables (Default) */
     --bg-app: #090a0f;
@@ -1070,7 +1070,10 @@ html[data-theme="light"] .hero-image-light {
     height: 100%;
     background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
     border-radius: 4px;
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Statistics Grid inside Card */
@@ -1418,33 +1421,20 @@ html[data-theme="light"] .hero-image-light {
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     background-color: transparent;
+    box-shadow:
+        0 10px 20px 0 rgba(255, 255, 255, 0.25) inset,
+        0 20px 30px 0 var(--color-primary) inset,
+        0 60px 60px 0 var(--color-secondary) inset;
     animation: loader-rotate 2s linear infinite;
     z-index: 0;
 }
 
 @keyframes loader-rotate {
     0% {
-        transform: rotate(90deg);
-        box-shadow:
-            0 10px 20px 0 rgba(255, 255, 255, 0.25) inset,
-            0 20px 30px 0 var(--color-primary) inset,
-            0 60px 60px 0 var(--color-secondary) inset;
+        transform: rotate(0deg);
     }
-
-    50% {
-        transform: rotate(270deg);
-        box-shadow:
-            0 10px 20px 0 rgba(255, 255, 255, 0.25) inset,
-            0 20px 10px 0 var(--color-accent) inset,
-            0 40px 60px 0 var(--color-primary) inset;
-    }
-
     100% {
-        transform: rotate(450deg);
-        box-shadow:
-            0 10px 20px 0 rgba(255, 255, 255, 0.25) inset,
-            0 20px 30px 0 var(--color-primary) inset,
-            0 60px 60px 0 var(--color-secondary) inset;
+        transform: rotate(360deg);
     }
 }
 
@@ -2335,7 +2325,7 @@ html[data-theme="light"] .hero-image-light {
     gap: 12px;
 }
 
-.details-section h4 {
+.details-section h3 {
     font-family: var(--font-heading);
     font-size: 0.8rem;
     font-weight: 700;

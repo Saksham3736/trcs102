@@ -140,38 +140,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 3. Core Auto-Discovery & Front Matter Parser ---
     
-    // Probe the /diary folder sequentially for dayN.md files
-    async function discoverEntries() {
-        const discovered = [];
-        let consecutiveMisses = 0;
-        let day = 1;
-        const maxConsecutiveMisses = 3; // Allow minor gaps (e.g. day 1, 2, 3, skipped 4, day 5)
-        const maxDaysToProbe = 100;
-        
-        while (consecutiveMisses < maxConsecutiveMisses && day <= maxDaysToProbe) {
-            const fileName = `day${day}.md`;
+    // Lazily fetch markdown content in background for full-text search without blocking page load
+    async function loadSearchIndexInBackground() {
+        for (const entry of window.diaryState.entries) {
+            if (window.diaryState.contentCache[entry.file]) continue;
             try {
-                // Use HEAD request to check if file exists quickly without downloading it
-                const res = await fetch(`diary/${fileName}?t=${Date.now()}`, { method: 'HEAD' });
+                const res = await fetch(`diary/${entry.file}?t=${Date.now()}`);
                 if (res.ok) {
-                    consecutiveMisses = 0;
-                    discovered.push({
-                        day: day,
-                        file: fileName,
-                        title: `Day ${day}`, // Fallback title
-                        date: '',
-                        tags: [],
-                        summary: ''
-                    });
-                } else {
-                    consecutiveMisses++;
+                    const text = await res.text();
+                    const parsed = parseFrontMatter(text);
+                    window.diaryState.contentCache[entry.file] = parsed.content;
                 }
             } catch (err) {
-                consecutiveMisses++;
+                console.warn(`Background pre-fetch failed for ${entry.file}:`, err);
             }
-            day++;
+            // Yield execution briefly to prevent visual frame drop
+            await new Promise(resolve => setTimeout(resolve, 300));
         }
-        return discovered;
     }
 
     // Parse Jekyll/Obsidian-style YAML front matter or HTML comment front matter from markdown files
@@ -263,9 +248,17 @@ document.addEventListener('DOMContentLoaded', () => {
             initScrollIndicator();
             initSearchEvents();
             
-            // Automatically discover diary entries in /diary directory
-            const data = await discoverEntries();
+            // Load pre-compiled diary entries from directory.json
+            const res = await fetch(`diary/directory.json?t=${Date.now()}`);
+            if (!res.ok) throw new Error("Failed to load directory.json metadata index.");
+            const data = await res.json();
+            
             window.diaryState.entries = data.sort((a, b) => a.day - b.day);
+            
+            // Populate wordsCache immediately from pre-compiled directory data
+            window.diaryState.entries.forEach(entry => {
+                window.diaryState.wordsCache[entry.file] = entry.wordCount;
+            });
             
             // Update total entry badges
             els.totalEntriesBadge.textContent = window.diaryState.entries.length;
@@ -274,8 +267,8 @@ document.addEventListener('DOMContentLoaded', () => {
             renderSidebarList();
             renderTimeline();
             
-            // Pre-fetch markdown contents in background for statistics calculations and instant full-text search
-            await prefetchAndCalcStats();
+            // Update dashboard analytics immediately from pre-populated metadata
+            calculateAnalytics();
             
             // Run Router once the configuration is loaded
             handleRouting();
@@ -289,6 +282,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     els.globalPageLoader.classList.add('hidden');
                 }
                 window.diaryState.isInitialLoad = false;
+                
+                // Trigger lazy loading of search index in background after loading is complete
+                loadSearchIndexInBackground();
             }, remaining);
             
         } catch (error) {
@@ -320,55 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Prefetch markdown files in background to compute exact word counts and build index
-    async function prefetchAndCalcStats() {
-        const fetchPromises = window.diaryState.entries.map(async (entry) => {
-            try {
-                const res = await fetch(`diary/${entry.file}?t=${Date.now()}`);
-                if (res.ok) {
-                    const text = await res.text();
-                    
-                    // Parse YAML front matter and extract metadata
-                    const parsed = parseFrontMatter(text);
-                    window.diaryState.contentCache[entry.file] = parsed.content;
-                    
-                    // Override metadata on entry object
-                    entry.title = parsed.title || entry.title;
-                    entry.date = parsed.date || entry.date;
-                    entry.tags = parsed.tags.length > 0 ? parsed.tags : entry.tags;
-                    entry.summary = parsed.summary || entry.summary;
-                    
-                    // Simple word count regex
-                    const wordCount = parsed.content.trim().split(/\s+/).filter(w => w.length > 0).length;
-                    window.diaryState.wordsCache[entry.file] = wordCount;
-                } else {
-                    console.warn(`Could not prefetch: diary/${entry.file}`);
-                    window.diaryState.wordsCache[entry.file] = 0;
-                }
-            } catch (err) {
-                console.error(err);
-                window.diaryState.wordsCache[entry.file] = 0;
-            }
-        });
-        
-        await Promise.all(fetchPromises);
-        
-        // Filter out entries that are empty (e.g. 0-byte placeholder files)
-        window.diaryState.entries = window.diaryState.entries.filter(entry => {
-            const wc = window.diaryState.wordsCache[entry.file] || 0;
-            return wc > 0;
-        });
-
-        // Update total entry badge count dynamically
-        els.totalEntriesBadge.textContent = window.diaryState.entries.length;
-        
-        // Re-render list & timeline with full metadata from files
-        renderSidebarList();
-        renderTimeline();
-        
-        // Update home dashboard analytics dynamically
-        calculateAnalytics();
-    }
+    // (Deprecated prefetchAndCalcStats - all metadata and word counts are loaded statically from directory.json)
 
     // Calculating dashboard stats
     function calculateAnalytics() {
@@ -379,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Progress Ratio
         els.progressPct.textContent = `${completionPct}%`;
         els.progressRatio.textContent = `${completedDays}/${totalDaysScheduled} Days`;
-        els.dashboardProgressFill.style.width = `${completionPct}%`;
+        els.dashboardProgressFill.style.transform = `scaleX(${completionPct / 100})`;
         
         // Total words written across all diary files
         let totalWords = 0;
@@ -491,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
         els.scrollProgressContainer.style.display = 'none';
 
         // 1. Dashboard / Home Route
-        if (hash === '#home' || hash === '#/home' || hash === '') {
+        if (hash === '#home' || hash === '#/home' || hash === '#view-home' || hash === '#/view-home' || hash === '') {
             if (window.diaryState.isInitialLoad) {
                 showView(els.viewHome);
             } else {
@@ -505,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } 
         
         // 2. Timeline Route
-        else if (hash === '#timeline' || hash === '#/timeline') {
+        else if (hash === '#timeline' || hash === '#/timeline' || hash === '#view-timeline' || hash === '#/view-timeline') {
             if (window.diaryState.isInitialLoad) {
                 showView(els.viewTimeline);
                 triggerTimelineAnimations();

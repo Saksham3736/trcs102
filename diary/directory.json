@@ -1,0 +1,220 @@
+[
+  {
+    "day": 1,
+    "file": "day1.md",
+    "title": "Introduction to Agentic AI Training & Industry Experience",
+    "date": "2026-06-25",
+    "tags": [
+      "Introduction",
+      "Samsung R&D",
+      "Python",
+      "Agentic AI",
+      "Training",
+      "Orientation"
+    ],
+    "summary": "The first day introduced the training roadmap, Ishant Sir's professional journey at Samsung R&D, the evolution of smartphones, student introductions, and an overview of Python and Agentic AI.",
+    "wordCount": 1186
+  },
+  {
+    "day": 2,
+    "file": "day2.md",
+    "title": "Python Fundamentals, Memory Management & MVC Architecture",
+    "date": "2026-06-26",
+    "tags": [
+      "Python",
+      "Memory Management",
+      "Process",
+      "Thread",
+      "MVC",
+      "Lists",
+      "Tuples",
+      "Object References"
+    ],
+    "summary": "Learned Python setup, execution model, processes, threads, memory architecture, MVC design pattern, Python object references, memory management concepts, and core data structures.",
+    "wordCount": 1277
+  },
+  {
+    "day": 3,
+    "file": "day3.md",
+    "title": "Python Data Structures, Hashing & Reference Copy",
+    "date": "2026-06-27",
+    "tags": [
+      "Python",
+      "Hashing",
+      "Data Structures",
+      "Lists",
+      "Sets",
+      "Dictionaries",
+      "Reference Copy",
+      "Assignments"
+    ],
+    "summary": "Day 3 focused on understanding hashing, shallow/reference copy, Python collections (List, Set, Dictionary), Unicode, nested data structures, and implementing real-world datasets using dictionaries and lists through practical assignments.",
+    "wordCount": 2944
+  },
+  {
+    "day": 4,
+    "file": "day4.md",
+    "title": "Python Memory Management, Sets, Dictionaries & Chessboard Implementation",
+    "date": "2026-06-29",
+    "tags": [
+      "Python",
+      "Memory Management",
+      "Hashing",
+      "Sets",
+      "Dictionaries",
+      "id()",
+      "__name__",
+      "Modules",
+      "Iteration",
+      "Nested Loops",
+      "Unicode",
+      "Chessboard"
+    ],
+    "summary": "Day 4 focused on Python memory management, object identity using id(), Sets and Dictionaries, the __name__ variable, module imports, iterations, nested loops, Unicode, and implementing a complete chessboard using optimized Python techniques.",
+    "wordCount": 5710
+  },
+  {
+    "day": 5,
+    "file": "day5.md",
+    "title": "Python Operators, Bitwise Operations & Conditional Constructs",
+    "date": "2026-06-30",
+    "tags": [
+      "Python",
+      "Operators",
+      "Conditionals",
+      "Bitwise Operations",
+      "Shift Operators",
+      "Authentication",
+      "Promo Code System",
+      "Problem Solving",
+      "Controller Logic"
+    ],
+    "summary": "Day 5 focused on Python operators, bitwise and shift operations, conditional programming, authentication systems, promo code validation, controller-based problem solving, and implementing the \"Another Brick in the Wall\" assignment using logical simulation.",
+    "wordCount": 7062
+  },
+  {
+    "day": 6,
+    "file": "day6.md",
+    "title": "Python Functions, Debugging and Code Reusability",
+    "date": "2026-07-01",
+    "tags": [
+      "Python",
+      "Functions",
+      "Debugging",
+      "VS Code",
+      "Recursion",
+      "*args",
+      "**kwargs",
+      "Return Statement",
+      "Code Reusability"
+    ],
+    "summary": "Day 6 focused on debugging Python programs in Visual Studio Code, understanding reusable functions, function parameters, default arguments, variable-length arguments, recursion, return statements, memory references, and best coding practices.",
+    "wordCount": 5410
+  },
+  {
+    "day": 7,
+    "file": "day7.md",
+    "title": "Recursion, Searching Algorithms & Sorting Techniques",
+    "date": "2026-07-03",
+    "tags": [
+      "Python",
+      "Recursion",
+      "Linear Search",
+      "Bubble Sort",
+      "Algorithms",
+      "Time Complexity",
+      "Flight Management",
+      "Data Structures"
+    ],
+    "summary": "Explored recursion through recursive algorithms, implemented linear search using multiple approaches, understood Bubble Sort, and built a flight management system supporting search, sorting, and filtering operations.",
+    "wordCount": 5438
+  },
+  {
+    "day": 8,
+    "file": "day8.md",
+    "title": "Object-Oriented Programming Fundamentals & Object Modeling",
+    "date": "2026-07-04",
+    "tags": [
+      "Python",
+      "OOP",
+      "Object-Oriented Programming",
+      "Classes",
+      "Objects",
+      "Constructors",
+      "MVC",
+      "SaaS",
+      "Object Modeling"
+    ],
+    "summary": "Learned the fundamentals of Object-Oriented Programming (OOP), object modeling through real-world case studies, relationship mapping, constructors, object references, and implemented an Employee Management System using Python classes.",
+    "wordCount": 6744
+  },
+  {
+    "day": 9,
+    "file": "day9.md",
+    "title": "Object-Oriented Programming with Circular Doubly Linked Lists",
+    "date": "2026-07-06",
+    "tags": [
+      "Python",
+      "OOP",
+      "Circular Doubly Linked List",
+      "Linked List",
+      "Objects",
+      "Classes",
+      "Data Structures",
+      "Dynamic Programming"
+    ],
+    "summary": "Continued Object-Oriented Programming by implementing Circular Doubly Linked Lists using Song objects, explored dynamic object management, forward and backward traversal, and developed a Movie Recommendation Scroller as a practical application.",
+    "wordCount": 6681
+  },
+  {
+    "day": 10,
+    "file": "day10.md",
+    "title": "Queue Implementation Using Circular Doubly Linked Lists & Python String Operations",
+    "date": "2026-07-07",
+    "tags": [
+      "Python",
+      "OOP",
+      "Queue",
+      "Circular Doubly Linked List",
+      "FastTag",
+      "Toll Plaza",
+      "Strings",
+      "String Formatting"
+    ],
+    "summary": "Implemented a Toll Plaza Queue using Circular Doubly Linked Lists and Object-Oriented Programming, simulated FASTag-based toll deduction, explored object composition, and learned various Python string operations and formatting techniques.",
+    "wordCount": 8543
+  },
+  {
+    "day": 11,
+    "file": "day11.md",
+    "title": "Python File Handling, JSON Processing, Virtual Environments & REST API Integration",
+    "date": "2026-07-08",
+    "tags": [
+      "Python",
+      "File Handling",
+      "File I/O",
+      "JSON",
+      "Virtual Environment",
+      "Requests",
+      "REST API",
+      "News API"
+    ],
+    "summary": "Explored Python File Handling using text files, learned File Input/Output streams, implemented file reading and writing operations, generated CSV reports, introduced JSON serialization and deserialization, configured Python Virtual Environments, and consumed a REST API using the Requests library.",
+    "wordCount": 6865
+  },
+  {
+    "day": 12,
+    "file": "day12.md",
+    "title": "Industry Interaction, AI Chatbot Architecture, Business Opportunities & Advanced Google Search Techniques",
+    "date": "2026-07-09",
+    "tags": [
+      "Industry Interaction",
+      "AI Chatbot",
+      "Business Ideas",
+      "Google Search Operators",
+      "Career Guidance"
+    ],
+    "summary": "Interacted with senior software engineers from Auribises Technologies, learned the high-level working of the Finlo AI Chatbot, explored digital business opportunities through website development, and discovered advanced Google search techniques for finding clients and technical information.",
+    "wordCount": 4334
+  }
+]
