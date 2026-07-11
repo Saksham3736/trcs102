@@ -216,5 +216,23 @@
     ],
     "summary": "Interacted with senior software engineers from Auribises Technologies, learned the high-level working of the Finlo AI Chatbot, explored digital business opportunities through website development, and discovered advanced Google search techniques for finding clients and technical information.",
     "wordCount": 4334
+  },
+  {
+    "day": 13,
+    "file": "day13.md",
+    "title": "MongoDB Atlas Integration, PyMongo, Password Hashing & Database Abstraction",
+    "date": "2026-07-10",
+    "tags": [
+      "MongoDB",
+      "MongoDB Atlas",
+      "NoSQL",
+      "PyMongo",
+      "SHA-256",
+      "File Handling",
+      "Backend Development",
+      "Database"
+    ],
+    "summary": "Learned the fundamentals of MongoDB Atlas, connected Python applications to a cloud database using PyMongo, implemented SHA-256 password hashing, stored user information in both CSV files and MongoDB collections, and designed a layered backend architecture using helper classes.",
+    "wordCount": 7021
   }
 ]
