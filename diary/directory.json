@@ -234,5 +234,22 @@
     ],
     "summary": "Learned the fundamentals of MongoDB Atlas, connected Python applications to a cloud database using PyMongo, implemented SHA-256 password hashing, stored user information in both CSV files and MongoDB collections, and designed a layered backend architecture using helper classes.",
     "wordCount": 7021
+  },
+  {
+    "day": 14,
+    "file": "day14.md",
+    "title": "MongoDB CRUD Operations and Streamlit User Registration Application",
+    "date": "2026-07-13",
+    "tags": [
+      "MongoDB",
+      "CRUD",
+      "Streamlit",
+      "PyMongo",
+      "Backend Development",
+      "Frontend Development",
+      "Full Stack"
+    ],
+    "summary": "Implemented CRUD (Create, Read, Update, Delete) operations using MongoDB and PyMongo, learned database querying techniques, and built a complete user registration web application using Streamlit integrated with MongoDB Atlas.",
+    "wordCount": 4307
   }
 ]
