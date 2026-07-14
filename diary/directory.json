@@ -233,7 +233,7 @@
       "Database"
     ],
     "summary": "Learned the fundamentals of MongoDB Atlas, connected Python applications to a cloud database using PyMongo, implemented SHA-256 password hashing, stored user information in both CSV files and MongoDB collections, and designed a layered backend architecture using helper classes.",
-    "wordCount": 7021
+    "wordCount": 6956
   },
   {
     "day": 14,
@@ -250,6 +250,23 @@
       "Full Stack"
     ],
     "summary": "Implemented CRUD (Create, Read, Update, Delete) operations using MongoDB and PyMongo, learned database querying techniques, and built a complete user registration web application using Streamlit integrated with MongoDB Atlas.",
-    "wordCount": 4307
+    "wordCount": 4775
+  },
+  {
+    "day": 15,
+    "file": "day15.md",
+    "title": "Building an Agentic Task Management Chatbot using Streamlit and MongoDB",
+    "date": "2026-07-14",
+    "tags": [
+      "Streamlit",
+      "MongoDB",
+      "Agentic AI",
+      "Chatbot",
+      "Session State",
+      "CRUD",
+      "Task Management"
+    ],
+    "summary": "Developed a conversational task management application using Streamlit, implemented CRUD operations on MongoDB through a chatbot interface, learned Streamlit Session State, and explored the fundamentals of Agentic AI task delegation.",
+    "wordCount": 6221
   }
 ]
