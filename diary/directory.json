@@ -268,5 +268,42 @@
     ],
     "summary": "Developed a conversational task management application using Streamlit, implemented CRUD operations on MongoDB through a chatbot interface, learned Streamlit Session State, and explored the fundamentals of Agentic AI task delegation.",
     "wordCount": 6221
+  },
+  {
+    "day": 16,
+    "file": "day16.md",
+    "title": "Building an LLM-Powered Agent using Function Calling, Google GenAI SDK & MongoDB",
+    "date": "2026-07-15",
+    "tags": [
+      "Agentic AI",
+      "Function Calling",
+      "Google GenAI",
+      "Gemini",
+      "Gemma",
+      "MongoDB",
+      "Streamlit",
+      "Tools"
+    ],
+    "summary": "Learned the architecture of AI Agents, integrated Google's GenAI SDK, introduced LLM function calling (tool use), dynamically executed Python functions selected by the LLM, and built an Agentic Task Management application using Streamlit and MongoDB Atlas.",
+    "wordCount": 6181
+  },
+  {
+    "day": 17,
+    "file": "day17.md",
+    "title": "Advanced Python Concepts for AI Agents – Iterators, Generators, Decorators & Functional Programming",
+    "date": "2026-07-16",
+    "tags": [
+      "Python",
+      "Iterators",
+      "Generators",
+      "Yield",
+      "Decorators",
+      "Lambda",
+      "Functional Programming",
+      "AI",
+      "Backend Development"
+    ],
+    "summary": "Explored advanced Python concepts including iterators, generators, decorators, lambda expressions, closures, and functional programming techniques such as map(), filter(), and reduce(). These concepts form the foundation of writing efficient, Pythonic, and scalable AI applications.",
+    "wordCount": 6627
   }
 ]
