@@ -78,7 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
         nextDayTitle: document.getElementById('next-day-title'),
         tocContainer: document.getElementById('toc-container'),
         globalPageLoader: document.getElementById('global-page-loader'),
-        searchSuggestionsDropdown: document.getElementById('search-suggestions-dropdown')
+        searchSuggestionsDropdown: document.getElementById('search-suggestions-dropdown'),
+        
+        // Engagement and Ratings
+        engagementViews: document.getElementById('engagement-views'),
+        ratingAvg: document.getElementById('rating-avg'),
+        ratingCount: document.getElementById('rating-count'),
+        interactiveStars: document.getElementById('interactive-stars'),
+        ratingSuccessMsg: document.getElementById('rating-success-msg'),
+        ratePromptText: document.getElementById('rate-prompt-text')
     };
 
     // Initialize Lucide Icons
@@ -269,6 +277,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Update dashboard analytics immediately from pre-populated metadata
             calculateAnalytics();
+
+            // Initialize views and ratings engagement card
+            initEngagementCard();
             
             // Run Router once the configuration is loaded
             handleRouting();
@@ -1240,6 +1251,247 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // --- 7. Engagement & Ratings Configuration ---
+    
+    // Config keys for persistence
+    const ENGAGEMENT_CONFIG = {
+        appKey: "saksham3736_trcs102_diary",
+        ratingKey: "diary_rating", // stores "sum-count" e.g., "413-86"
+        viewsNamespace: "saksham3736_trcs102_views",
+        viewsKey: "views",
+        // Seed default fallback values
+        seedViews: 248,
+        seedSum: 413,
+        seedCount: 86
+    };
+
+    function initEngagementCard() {
+        if (!els.engagementViews) return;
+
+        // 1. Increment and fetch Views
+        incrementAndFetchViews();
+
+        // 2. Fetch and render Ratings
+        fetchAndRenderRatings();
+
+        // 3. Set up interactive star elements
+        setupInteractiveStars();
+    }
+
+    async function incrementAndFetchViews() {
+        let views = ENGAGEMENT_CONFIG.seedViews;
+        
+        // Check if we already incremented in this session to avoid infinite incrementing on reload
+        const sessionIncremented = sessionStorage.getItem('views_incremented');
+        const apiEndpoint = `https://api.counterapi.dev/v1/${ENGAGEMENT_CONFIG.viewsNamespace}/${ENGAGEMENT_CONFIG.viewsKey}${sessionIncremented ? '' : '/up'}`;
+        
+        try {
+            // Setup a controller to timeout after 2.5 seconds
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2500);
+
+            const res = await fetch(apiEndpoint, { signal: controller.signal });
+            clearTimeout(timeoutId);
+
+            if (res.ok) {
+                const data = await res.json();
+                if (data && typeof data.count === 'number') {
+                    views = data.count;
+                    if (!sessionIncremented) {
+                        sessionStorage.setItem('views_incremented', 'true');
+                    }
+                    localStorage.setItem('cached_views', views);
+                }
+            } else {
+                throw new Error("API responded with error");
+            }
+        } catch (err) {
+            console.warn("Failed to fetch views from API, falling back to cache/local:", err);
+            // Local fallback
+            const cachedViews = localStorage.getItem('cached_views');
+            if (cachedViews) {
+                views = parseInt(cachedViews, 10);
+            }
+            if (!sessionIncremented) {
+                views += 1;
+                sessionStorage.setItem('views_incremented', 'true');
+                localStorage.setItem('cached_views', views);
+            }
+        }
+        
+        // Update UI
+        els.engagementViews.textContent = views;
+    }
+
+    async function fetchAndRenderRatings(userRating = null) {
+        let sum = ENGAGEMENT_CONFIG.seedSum;
+        let count = ENGAGEMENT_CONFIG.seedCount;
+
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2500);
+            
+            const res = await fetch(`https://keyvalue.immanuel.co/api/KeyVal/GetValue/${ENGAGEMENT_CONFIG.appKey}/${ENGAGEMENT_CONFIG.ratingKey}`, {
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (res.ok) {
+                const text = await res.json(); // keyvalue returns JSON string representing the value
+                if (text && text.includes('-')) {
+                    const parts = text.split('-');
+                    const parsedSum = parseInt(parts[0], 10);
+                    const parsedCount = parseInt(parts[1], 10);
+                    if (!isNaN(parsedSum) && !isNaN(parsedCount)) {
+                        sum = parsedSum;
+                        count = parsedCount;
+                        localStorage.setItem('cached_rating_sum', sum);
+                        localStorage.setItem('cached_rating_count', count);
+                    }
+                }
+            }
+        } catch (err) {
+            console.warn("Failed to fetch ratings from KeyValue API, using cache/local:", err);
+            const cachedSum = localStorage.getItem('cached_rating_sum');
+            const cachedCount = localStorage.getItem('cached_rating_count');
+            if (cachedSum && cachedCount) {
+                sum = parseInt(cachedSum, 10);
+                count = parseInt(cachedCount, 10);
+            }
+        }
+
+        const avg = count > 0 ? (sum / count).toFixed(1) : "0.0";
+        els.ratingAvg.textContent = avg;
+        els.ratingCount.textContent = count;
+
+        // Render previous user rating state if it exists
+        const savedRating = userRating || localStorage.getItem('user_diary_rating');
+        if (savedRating) {
+            const ratingVal = parseInt(savedRating, 10);
+            els.interactiveStars.classList.add('disabled');
+            els.ratePromptText.textContent = "Your Rating:";
+            
+            // Highlight stars up to rated value
+            const stars = els.interactiveStars.querySelectorAll('.star-interactive');
+            stars.forEach(star => {
+                const val = parseInt(star.getAttribute('data-val'), 10);
+                if (val <= ratingVal) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+    }
+
+    function setupInteractiveStars() {
+        const stars = els.interactiveStars.querySelectorAll('.star-interactive');
+        const savedRating = localStorage.getItem('user_diary_rating');
+
+        if (savedRating) {
+            // Already rated, highlight stars and return
+            const ratingVal = parseInt(savedRating, 10);
+            stars.forEach(star => {
+                const val = parseInt(star.getAttribute('data-val'), 10);
+                if (val <= ratingVal) {
+                    star.classList.add('active');
+                }
+            });
+            els.interactiveStars.classList.add('disabled');
+            els.ratePromptText.textContent = "Your Rating:";
+            return;
+        }
+
+        stars.forEach(star => {
+            // Hover effect
+            star.addEventListener('mouseenter', () => {
+                const hoverVal = parseInt(star.getAttribute('data-val'), 10);
+                stars.forEach(s => {
+                    const val = parseInt(s.getAttribute('data-val'), 10);
+                    if (val <= hoverVal) {
+                        s.classList.add('hovered');
+                    } else {
+                        s.classList.remove('hovered');
+                    }
+                });
+            });
+
+            // Hover leave effect
+            star.addEventListener('mouseleave', () => {
+                stars.forEach(s => s.classList.remove('hovered'));
+            });
+
+            // Click submit effect
+            star.addEventListener('click', async () => {
+                const ratingVal = parseInt(star.getAttribute('data-val'), 10);
+                if (isNaN(ratingVal)) return;
+
+                // Disable ratings to prevent double submission
+                els.interactiveStars.classList.add('disabled');
+                
+                // Show local success state immediately
+                localStorage.setItem('user_diary_rating', ratingVal);
+                els.ratingSuccessMsg.classList.remove('hidden');
+                els.ratePromptText.textContent = "Your Rating:";
+                
+                // Fill clicked stars
+                stars.forEach(s => {
+                    const val = parseInt(s.getAttribute('data-val'), 10);
+                    if (val <= ratingVal) {
+                        s.classList.add('active');
+                    }
+                });
+
+                // Update ratings globally
+                await submitRating(ratingVal);
+            });
+        });
+    }
+
+    async function submitRating(userRating) {
+        let sum = ENGAGEMENT_CONFIG.seedSum;
+        let count = ENGAGEMENT_CONFIG.seedCount;
+
+        // Read current cache first
+        const cachedSum = localStorage.getItem('cached_rating_sum');
+        const cachedCount = localStorage.getItem('cached_rating_count');
+        if (cachedSum && cachedCount) {
+            sum = parseInt(cachedSum, 10);
+            count = parseInt(cachedCount, 10);
+        }
+
+        // Add the new rating
+        sum += userRating;
+        count += 1;
+
+        // Save locally
+        localStorage.setItem('cached_rating_sum', sum);
+        localStorage.setItem('cached_rating_count', count);
+
+        // Update UI immediately
+        const avg = (sum / count).toFixed(1);
+        els.ratingAvg.textContent = avg;
+        els.ratingCount.textContent = count;
+
+        // Try pushing to keyvalue server
+        const payload = `${sum}-${count}`;
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3000);
+            const res = await fetch(`https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${ENGAGEMENT_CONFIG.appKey}/${ENGAGEMENT_CONFIG.ratingKey}/${payload}`, {
+                method: 'POST',
+                body: '',
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            if (res.ok) {
+                console.log("Global rating updated successfully!");
+            }
+        } catch (err) {
+            console.warn("Failed to push rating to server, will retry on reload:", err);
+        }
     }
 
     // Launch Application

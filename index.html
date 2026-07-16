@@ -36,7 +36,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js" defer></script>
 
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
 </head>
 
 <body>
@@ -310,6 +310,43 @@
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Engagement Card -->
+                        <div class="card card-engagement">
+                            <div class="card-header-icon engagement-icon-bg">
+                                <i data-lucide="eye"></i>
+                            </div>
+                            <h3>Viewer Engagement</h3>
+                            <div class="engagement-stats">
+                                <div class="engagement-views-box">
+                                    <span class="views-num" id="engagement-views">0</span>
+                                    <span class="views-lbl">Total Views</span>
+                                </div>
+                                <div class="engagement-rating-box">
+                                    <div class="rating-display">
+                                        <span class="rating-num" id="rating-avg">0.0</span>
+                                        <span class="rating-stars-small">
+                                            <i data-lucide="star" class="star-filled"></i>
+                                        </span>
+                                    </div>
+                                    <span class="rating-count-lbl"><span id="rating-count">0</span> ratings</span>
+                                </div>
+                            </div>
+                            
+                            <div class="rating-divider"></div>
+                            
+                            <div class="interactive-rating-section">
+                                <span class="rate-prompt" id="rate-prompt-text">Rate this Diary:</span>
+                                <div class="rating-stars" id="interactive-stars">
+                                    <i data-lucide="star" class="star-interactive" data-val="1"></i>
+                                    <i data-lucide="star" class="star-interactive" data-val="2"></i>
+                                    <i data-lucide="star" class="star-interactive" data-val="3"></i>
+                                    <i data-lucide="star" class="star-interactive" data-val="4"></i>
+                                    <i data-lucide="star" class="star-interactive" data-val="5"></i>
+                                </div>
+                                <span class="rating-success-msg hidden" id="rating-success-msg">Thank you for rating!</span>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -444,7 +481,7 @@
     </div>
 
     <!-- Main Controller Script -->
-    <script src="script.js" defer></script>
+    <script src="script.js?v=1.1" defer></script>
 </body>
 
 </html>
