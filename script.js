@@ -1253,15 +1253,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    // --- 7. Engagement & Ratings Configuration ---
+    // --- 7. Engagement & Ratings Configuration (Firebase Realtime Database) ---
     
-    // Config keys for persistence
     const ENGAGEMENT_CONFIG = {
-        appKey: "saksham3736_trcs102_diary",
-        ratingKey: "diary_rating", // stores "sum-count" e.g., "413-86"
-        viewsNamespace: "saksham3736_trcs102_views",
-        viewsKey: "views",
-        // Seed default fallback values
+        firebaseUrl: "https://trcs102-diary-default-rtdb.firebaseio.com/engagement.json",
         seedViews: 248,
         seedSum: 413,
         seedCount: 86
@@ -1282,34 +1277,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function incrementAndFetchViews() {
         let views = ENGAGEMENT_CONFIG.seedViews;
-        
-        // Check if we already incremented in this session to avoid infinite incrementing on reload
         const sessionIncremented = sessionStorage.getItem('views_incremented');
-        const apiEndpoint = `https://api.counterapi.dev/v1/${ENGAGEMENT_CONFIG.viewsNamespace}/${ENGAGEMENT_CONFIG.viewsKey}${sessionIncremented ? '' : '/up'}`;
         
         try {
-            // Setup a controller to timeout after 2.5 seconds
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 2500);
+            const timeoutId = setTimeout(() => controller.abort(), 3500);
 
-            const res = await fetch(apiEndpoint, { signal: controller.signal });
+            const res = await fetch(ENGAGEMENT_CONFIG.firebaseUrl, { signal: controller.signal });
             clearTimeout(timeoutId);
 
             if (res.ok) {
                 const data = await res.json();
-                if (data && typeof data.count === 'number') {
-                    views = data.count;
-                    if (!sessionIncremented) {
-                        sessionStorage.setItem('views_incremented', 'true');
-                    }
-                    localStorage.setItem('cached_views', views);
+                if (data && typeof data.views === 'number') {
+                    views = data.views;
                 }
+                
+                if (!sessionIncremented) {
+                    views += 1;
+                    sessionStorage.setItem('views_incremented', 'true');
+                    
+                    // Push incremented view count to Firebase asynchronously
+                    fetch(ENGAGEMENT_CONFIG.firebaseUrl, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ views: views })
+                    }).catch(err => console.warn("Firebase view update failed:", err));
+                }
+                
+                localStorage.setItem('cached_views', views);
             } else {
-                throw new Error("API responded with error");
+                throw new Error("Firebase fetch error");
             }
         } catch (err) {
-            console.warn("Failed to fetch views from API, falling back to cache/local:", err);
-            // Local fallback
+            console.warn("Failed to fetch views from Firebase, falling back to local cache:", err);
             const cachedViews = localStorage.getItem('cached_views');
             if (cachedViews) {
                 views = parseInt(cachedViews, 10);
@@ -1331,29 +1331,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 2500);
+            const timeoutId = setTimeout(() => controller.abort(), 3500);
             
-            const res = await fetch(`https://keyvalue.immanuel.co/api/KeyVal/GetValue/${ENGAGEMENT_CONFIG.appKey}/${ENGAGEMENT_CONFIG.ratingKey}`, {
+            const res = await fetch(ENGAGEMENT_CONFIG.firebaseUrl, {
                 signal: controller.signal
             });
             clearTimeout(timeoutId);
 
             if (res.ok) {
-                const text = await res.json(); // keyvalue returns JSON string representing the value
-                if (text && text.includes('-')) {
-                    const parts = text.split('-');
-                    const parsedSum = parseInt(parts[0], 10);
-                    const parsedCount = parseInt(parts[1], 10);
-                    if (!isNaN(parsedSum) && !isNaN(parsedCount)) {
-                        sum = parsedSum;
-                        count = parsedCount;
+                const data = await res.json();
+                if (data && data.rating) {
+                    if (typeof data.rating.sum === 'number' && typeof data.rating.count === 'number') {
+                        sum = data.rating.sum;
+                        count = data.rating.count;
                         localStorage.setItem('cached_rating_sum', sum);
                         localStorage.setItem('cached_rating_count', count);
                     }
                 }
             }
         } catch (err) {
-            console.warn("Failed to fetch ratings from KeyValue API, using cache/local:", err);
+            console.warn("Failed to fetch ratings from Firebase, using cache/local:", err);
             const cachedSum = localStorage.getItem('cached_rating_sum');
             const cachedCount = localStorage.getItem('cached_rating_count');
             if (cachedSum && cachedCount) {
@@ -1454,12 +1451,23 @@ document.addEventListener('DOMContentLoaded', () => {
         let sum = ENGAGEMENT_CONFIG.seedSum;
         let count = ENGAGEMENT_CONFIG.seedCount;
 
-        // Read current cache first
-        const cachedSum = localStorage.getItem('cached_rating_sum');
-        const cachedCount = localStorage.getItem('cached_rating_count');
-        if (cachedSum && cachedCount) {
-            sum = parseInt(cachedSum, 10);
-            count = parseInt(cachedCount, 10);
+        // Read current cache or fetch current totals first
+        try {
+            const res = await fetch(ENGAGEMENT_CONFIG.firebaseUrl);
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.rating && typeof data.rating.sum === 'number' && typeof data.rating.count === 'number') {
+                    sum = data.rating.sum;
+                    count = data.rating.count;
+                }
+            }
+        } catch (e) {
+            const cachedSum = localStorage.getItem('cached_rating_sum');
+            const cachedCount = localStorage.getItem('cached_rating_count');
+            if (cachedSum && cachedCount) {
+                sum = parseInt(cachedSum, 10);
+                count = parseInt(cachedCount, 10);
+            }
         }
 
         // Add the new rating
@@ -1475,22 +1483,22 @@ document.addEventListener('DOMContentLoaded', () => {
         els.ratingAvg.textContent = avg;
         els.ratingCount.textContent = count;
 
-        // Try pushing to keyvalue server
-        const payload = `${sum}-${count}`;
+        // Push to Firebase Realtime Database
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 3000);
-            const res = await fetch(`https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/${ENGAGEMENT_CONFIG.appKey}/${ENGAGEMENT_CONFIG.ratingKey}/${payload}`, {
-                method: 'POST',
-                body: '',
+            const timeoutId = setTimeout(() => controller.abort(), 3500);
+            const res = await fetch(ENGAGEMENT_CONFIG.firebaseUrl, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rating: { sum: sum, count: count } }),
                 signal: controller.signal
             });
             clearTimeout(timeoutId);
             if (res.ok) {
-                console.log("Global rating updated successfully!");
+                console.log("Firebase rating updated successfully!");
             }
         } catch (err) {
-            console.warn("Failed to push rating to server, will retry on reload:", err);
+            console.warn("Failed to push rating to Firebase, saved locally:", err);
         }
     }
 
