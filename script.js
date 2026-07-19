@@ -1278,17 +1278,21 @@ document.addEventListener('DOMContentLoaded', () => {
     async function incrementAndFetchViews() {
         let views = ENGAGEMENT_CONFIG.seedViews;
         const sessionIncremented = sessionStorage.getItem('views_incremented');
+        const fetchUrl = `${ENGAGEMENT_CONFIG.firebaseUrl}?t=${Date.now()}`;
         
         try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 3500);
 
-            const res = await fetch(ENGAGEMENT_CONFIG.firebaseUrl, { signal: controller.signal });
+            const res = await fetch(fetchUrl, { 
+                cache: 'no-cache',
+                signal: controller.signal 
+            });
             clearTimeout(timeoutId);
 
             if (res.ok) {
                 const data = await res.json();
-                if (data && typeof data.views === 'number') {
+                if (data && typeof data.views === 'number' && data.views > 0) {
                     views = data.views;
                 }
                 
@@ -1311,7 +1315,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.warn("Failed to fetch views from Firebase, falling back to local cache:", err);
             const cachedViews = localStorage.getItem('cached_views');
-            if (cachedViews) {
+            if (cachedViews && parseInt(cachedViews, 10) >= 100) {
                 views = parseInt(cachedViews, 10);
             }
             if (!sessionIncremented) {
@@ -1332,8 +1336,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 3500);
+            const fetchUrl = `${ENGAGEMENT_CONFIG.firebaseUrl}?t=${Date.now()}`;
             
-            const res = await fetch(ENGAGEMENT_CONFIG.firebaseUrl, {
+            const res = await fetch(fetchUrl, {
+                cache: 'no-cache',
                 signal: controller.signal
             });
             clearTimeout(timeoutId);
