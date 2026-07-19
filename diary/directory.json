@@ -305,5 +305,23 @@
     ],
     "summary": "Explored advanced Python concepts including iterators, generators, decorators, lambda expressions, closures, and functional programming techniques such as map(), filter(), and reduce(). These concepts form the foundation of writing efficient, Pythonic, and scalable AI applications.",
     "wordCount": 6627
+  },
+  {
+    "day": 18,
+    "file": "day18.md",
+    "title": "Python Collections, Exception Handling & Built-in Functions",
+    "date": "2026-07-18",
+    "tags": [
+      "Python",
+      "List",
+      "Tuple",
+      "Set",
+      "Dictionary",
+      "Exception Handling",
+      "Built-in Functions",
+      "Data Structures"
+    ],
+    "summary": "Learned Python collections including lists, tuples, sets, and dictionaries along with indexing, slicing, exception handling, collection operations, and various built-in methods that are widely used in backend development and AI programming.",
+    "wordCount": 8682
   }
 ]
