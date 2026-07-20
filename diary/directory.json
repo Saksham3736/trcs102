@@ -323,5 +323,24 @@
     ],
     "summary": "Learned Python collections including lists, tuples, sets, and dictionaries along with indexing, slicing, exception handling, collection operations, and various built-in methods that are widely used in backend development and AI programming.",
     "wordCount": 8682
+  },
+  {
+    "day": 19,
+    "file": "day19.md",
+    "title": "Regular Expressions & Multi-Page Agentic AI Application using Streamlit",
+    "date": "2026-07-20",
+    "tags": [
+      "Python",
+      "Regular Expressions",
+      "Regex",
+      "Streamlit",
+      "Agentic AI",
+      "MongoDB Atlas",
+      "Function Calling",
+      "Gemma",
+      "UI Development"
+    ],
+    "summary": "Learned Python Regular Expressions for searching, extracting, and validating data. Built a multi-page Streamlit application integrated with MongoDB Atlas and Google's Gemma model using Function Calling to create an Agentic AI Task Management system.",
+    "wordCount": 14383
   }
 ]
