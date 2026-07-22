@@ -341,6 +341,45 @@
       "UI Development"
     ],
     "summary": "Learned Python Regular Expressions for searching, extracting, and validating data. Built a multi-page Streamlit application integrated with MongoDB Atlas and Google's Gemma model using Function Calling to create an Agentic AI Task Management system.",
-    "wordCount": 14383
+    "wordCount": 14450
+  },
+  {
+    "day": 20,
+    "file": "day20.md",
+    "title": "Building Conversational AI with ElevenLabs & Streamlit",
+    "date": "2026-07-21",
+    "tags": [
+      "ElevenLabs",
+      "Conversational AI",
+      "Streamlit",
+      "API Integration",
+      "Guardrails",
+      "Knowledge Base",
+      "Twilio",
+      "Python",
+      "Agentic AI",
+      "Session State"
+    ],
+    "summary": "Explored the ElevenLabs Conversational AI platform, understood Guardrails and Knowledge Base concepts, created and configured an AI agent, generated API credentials, and built a Streamlit-based chat interface that communicates with an ElevenLabs agent using the Python SDK and callback functions.",
+    "wordCount": 6713
+  },
+  {
+    "day": 21,
+    "file": "day21.md",
+    "title": "Structuring DelegatAI: Task Delegation Agent & Project Setup",
+    "date": "2026-07-22",
+    "tags": [
+      "Project Setup",
+      "Git",
+      "Configuration",
+      "MongoDB Atlas",
+      "PyMongo",
+      "JSON Processing",
+      "Software Architecture",
+      "Agentic AI",
+      "DelegatAI"
+    ],
+    "summary": "Initiated the DelegatAI Task Delegation Agent project. Structured the modular application directory, configured virtual environments, initialized environment variables, integrated MongoDB Atlas database helpers, and implemented contact list import from JSON into MongoDB.",
+    "wordCount": 4183
   }
 ]
