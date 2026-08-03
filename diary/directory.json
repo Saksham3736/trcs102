@@ -420,5 +420,63 @@
     ],
     "summary": "Continued building DelegatAI by integrating ElevenLabs AI Caller Agent for outbound call execution. Configured MongoDB database references, updated task schemas to include recipient contact names, created execute_pending_calls() using ElevenLabs API, bound the UI to trigger automated calls, stored conversation IDs in MongoDB, and built real-time status fetching for the analytics dashboard.",
     "wordCount": 5400
+  },
+  {
+    "day": 24,
+    "file": "day24.md",
+    "title": "DelegatAI Platform Enhancement: Modern Interactive UI, Agentic Task Querying, Contacts CRUD, Automated Call Execution & Executive Dashboard Metrics",
+    "date": "2026-07-25",
+    "tags": [
+      "DelegatAI",
+      "Streamlit UI",
+      "Custom CSS",
+      "Vibe Code",
+      "Agentic Querying",
+      "Task Management",
+      "Contacts CRUD",
+      "Automated Execution",
+      "Real-time Dashboard",
+      "MongoDB"
+    ],
+    "summary": "Extended the DelegatAI platform in Session 8 by modernizing the Streamlit user interface with custom HTML/CSS and glassmorphism styling, introducing agentic querying tools for natural language task filtering and contact CRUD operations, automating outbound call execution without manual button interaction, implementing datetime filters for live call execution tracking, and building an executive dashboard displaying key metrics like Total Calls, Total Tasks, Calls Failed, and Total Contacts.",
+    "wordCount": 5600
+  },
+  {
+    "day": 25,
+    "file": "day25.md",
+    "title": "Python Microservices with Flask Framework, Dynamic Routing & Google Cloud Firestore Integration",
+    "date": "2026-07-29",
+    "tags": [
+      "Flask",
+      "Python Microservices",
+      "Web APIs",
+      "Dynamic Routing",
+      "Jinja2 Templates",
+      "Google Cloud Firestore",
+      "Firebase Admin SDK",
+      "NoSQL Database",
+      "CRUD Operations"
+    ],
+    "summary": "Explored Python web application and microservices development using the Flask framework in Day 25. Built web APIs with static and dynamic URL routing, query parameter handling, and JSON responses. Integrated Google Cloud Firestore using the Firebase Admin SDK to perform full CRUD operations on hierarchical NoSQL document databases, and connected Flask POST endpoints to persist form inputs to Firestore.",
+    "wordCount": 5200
+  },
+  {
+    "day": 26,
+    "file": "day26.md",
+    "title": "Software Deployment Evolution: Traditional Bare-Metal, Virtual Machines, Docker Containers & Kubernetes Orchestration",
+    "date": "2026-07-30",
+    "tags": [
+      "Software Deployment",
+      "Traditional Infrastructure",
+      "Virtualization",
+      "Hypervisor",
+      "Virtual Machines",
+      "Docker Containers",
+      "Kubernetes",
+      "Microservices Deployment",
+      "Cloud Infrastructure"
+    ],
+    "summary": "Explored the generational evolution of application deployment strategies in Day 26. Analyzed Traditional Bare-Metal deployments, Virtualized Infrastructure with Hypervisors, Containerized Deployments using Docker, and automated Container Orchestration with Kubernetes (K8s). Compared resource consumption, isolation guarantees, boot performance, and real-world microservices deployment on modern cloud platforms like Render and Vercel.",
+    "wordCount": 5500
   }
 ]
