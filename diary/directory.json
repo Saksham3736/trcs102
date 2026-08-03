@@ -478,5 +478,86 @@
     ],
     "summary": "Explored the generational evolution of application deployment strategies in Day 26. Analyzed Traditional Bare-Metal deployments, Virtualized Infrastructure with Hypervisors, Containerized Deployments using Docker, and automated Container Orchestration with Kubernetes (K8s). Compared resource consumption, isolation guarantees, boot performance, and real-world microservices deployment on modern cloud platforms like Render and Vercel.",
     "wordCount": 5500
+  },
+  {
+    "day": 27,
+    "file": "day27.md",
+    "title": "ScriptIQ Phase 1: Core Agentic AI Engine & Multi-Agent Architecture",
+    "date": "2026-08-03",
+    "tags": [
+      "ScriptIQ",
+      "Agentic AI",
+      "Speech-to-Text",
+      "Gemini Multimodal API",
+      "Tool Calling",
+      "Pydantic Schema",
+      "ReportLab PDF",
+      "PyMongo",
+      "MongoDB Atlas",
+      "Healthcare AI"
+    ],
+    "summary": "Initiated development of ScriptIQ (Agentic AI Medical Consultation & Pharmacy POS Suite) in Day 27. Engineered the multi-agent microservice architecture including SpeechAgent for multimodal audio transcription, PrescriptionAgent leveraging Gemini function calling with 7 clinical tools, PDFAgent for structured ReportLab PDF generation, DatabaseAgent for PyMongo connection pooling, and ai_prescription_agent.py as the master orchestrator.",
+    "wordCount": 5800
+  },
+  {
+    "day": 28,
+    "file": "day28.md",
+    "title": "ScriptIQ Phase 2: Full-Stack Production Architecture & React/Vite Clinical Console UI",
+    "date": "2026-08-04",
+    "tags": [
+      "ScriptIQ",
+      "Full-Stack Monorepo",
+      "FastAPI",
+      "React 18",
+      "Vite",
+      "TypeScript",
+      "Zustand",
+      "Design Tokens",
+      "JWT Auth",
+      "RBAC",
+      "Doctor Console"
+    ],
+    "summary": "Transitioned ScriptIQ into a full-stack production monorepo in Day 28. Built an asynchronous FastAPI REST backend server (server.py) with worker threadpools, WebSockets, and JWT authentication. Scaffolded a React 18 + Vite SPA frontend featuring custom design tokens (tokens.css), Light/Dark ThemeProvider, Zustand state management, and a 3-pane zero-scroll Doctor Consultation Console (/console) with DOB patient intake and real-time age auto-calculation.",
+    "wordCount": 6100
+  },
+  {
+    "day": 29,
+    "file": "day29.md",
+    "title": "ScriptIQ Phase 3: Patient Security, Auto-Pilot Orchestration & Multi-Channel Delivery Engine",
+    "date": "2026-08-05",
+    "tags": [
+      "ScriptIQ",
+      "PDF Password Encryption",
+      "EmailAgent",
+      "SMTP TLS",
+      "PushAgent",
+      "Web Push",
+      "VAPID",
+      "Auto-Pilot Mode",
+      "Master Agent Telemetry",
+      "Patient Security"
+    ],
+    "summary": "Advanced ScriptIQ in Day 29 by implementing healthcare data security safeguards, zero-touch auto-pilot orchestration, and multi-channel patient delivery pipelines. Engineered 3-tier fallback PDF password encryption (DOB -> Phone-Last-4 -> 1234), dual-port Gmail SMTP email dispatcher (EmailAgent) with security callout banners, VAPID Web Push notifications (PushAgent), master agent zero-touch Auto-Pilot execution with live WebSocket telemetry, and high-security typed confirmation record deletion modals.",
+    "wordCount": 6300
+  },
+  {
+    "day": 30,
+    "file": "day30.md",
+    "title": "ScriptIQ Phase 4: In-House Pharmacy POS, Cloud Production Deployment & Training Program Capstone",
+    "date": "2026-08-06",
+    "tags": [
+      "ScriptIQ",
+      "Pharmacy POS",
+      "Thermal Printing",
+      "Letterhead Customizer",
+      "Memory Optimization",
+      "Render",
+      "Vercel",
+      "Cloud Deployment",
+      "Capstone Project",
+      "GitHub"
+    ],
+    "summary": "Completed Phase 4 and the capstone release of ScriptIQ on Day 30. Built the In-House Pharmacy POS workspace with 80mm thermal printing and UPI QR codes, standalone official letterhead receipt views (/receipt/:orderId), letterhead settings customizer, and achieved an 87% backend memory reduction (550MB down to ~70MB RAM) for cloud compatibility. Successfully deployed backend microservices on Render and frontend SPA on Vercel, with ongoing development hosted at https://github.com/Saksham3736/scriptiq.",
+    "wordCount": 6500
   }
 ]
